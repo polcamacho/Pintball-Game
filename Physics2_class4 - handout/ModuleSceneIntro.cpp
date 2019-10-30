@@ -6,12 +6,11 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "p2SString.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
-	ray_on = false;
-	sensed = false;
+	graphics = NULL;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -25,12 +24,46 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	
+	
+	graphics = App->textures->Load("MAPA"); 
+	bounce[0].texture= bounce[1].texture= bounce[2].texture= bounce[3].texture= bounce[4].texture= bounce[5].texture= bounce[6].texture= bounce[7].texture= bounce[8].texture= bounce[9].texture= App->textures->Load("BOUNCE");
+	left_bounce.texture = right_bounce.texture = App->textures->Load("RIGHTANDLEFTBOUNCE");
+	bounce->fx = App->audio->LoadFx("BOUCE FX");
+	App->audio->PlayMusic("MUSICAMAPA");
+	
+	bounce[0].body = App->physics->CreateCircle(0,0,0);
+	bounce[0].body->listener = this;
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	bounce[1].body = App->physics->CreateCircle(0, 0, 0);
+	bounce[1].body->listener = this;
+
+	bounce[2].body = App->physics->CreateCircle(0, 0, 0);
+	bounce[2].body->listener = this;
+
+	bounce[3].body = App->physics->CreateCircle(0, 0, 0);
+	bounce[3].body->listener = this;
+
+	bounce[4].body = App->physics->CreateCircle(0, 0, 0);
+	bounce[4].body->listener = this;
+
+	bounce[5].body = App->physics->CreateCircle(0, 0, 0);
+	bounce[5].body->listener = this;
+
+	bounce[6].body = App->physics->CreateCircle(0, 0, 0);
+	bounce[6].body->listener = this;
+
+	bounce[7].body = App->physics->CreateCircle(0, 0, 0);
+	bounce[7].body->listener = this;
+
+	bounce[8].body = App->physics->CreateCircle(0, 0, 0);
+	bounce[8].body->listener = this;
+
+	bounce[9].body = App->physics->CreateCircle(0, 0, 0);
+	bounce[9].body->listener = this;
+	
+	CollisionMap();
+
 
 	return ret;
 }
