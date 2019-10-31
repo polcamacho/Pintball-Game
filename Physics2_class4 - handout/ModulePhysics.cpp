@@ -37,7 +37,7 @@ bool ModulePhysics::Start()
 
 	// big static circle as "ground" in the middle of the screen
 	int x = SCREEN_WIDTH / 2;
-	int y = SCREEN_HEIGHT / 1.5f;
+	int y = SCREEN_HEIGHT / 2;
 	int diameter = SCREEN_WIDTH / 2;
 	
 	return true;
@@ -89,7 +89,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -127,7 +127,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	fixture.density = 1.0f;
 	fixture.isSensor = true;
 
-	//b->CreateFixture(&fixture);
+	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
@@ -141,7 +141,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);

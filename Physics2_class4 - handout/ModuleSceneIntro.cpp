@@ -32,8 +32,10 @@ bool ModuleSceneIntro::Start()
 
 	pin_background = App->textures->Load("pinball/background.png");
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	rect_ground = App->physics->CreateRectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
+	SetChain();
+	
 	return ret;
 }
 
@@ -193,4 +195,28 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		bodyB->GetPosition(x, y);
 		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
 	}*/
+}
+
+void ModuleSceneIntro::SetChain(){
+	// Pivot 0, 0
+	int background[34] = {
+		11, 395,
+		11, 195,
+		7, 170,
+		8, 138,
+		17, 106,
+		37, 77,
+		67, 53,
+		100, 41,
+		140, 39,
+		168, 46,
+		191, 57,
+		208, 70,
+		225, 89,
+		235, 106,
+		245, 130,
+		247, 158,
+		247, 390
+	};
+	background_chain = App->physics->CreateChain(0, 0, background, 20);
 }

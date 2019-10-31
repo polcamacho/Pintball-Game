@@ -16,6 +16,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+	void SetChain();
+
 
 public:
 	p2List<PhysBody*> circles;
@@ -23,6 +25,8 @@ public:
 	p2List<PhysBody*> ricks;
 
 	PhysBody* sensor;
+	PhysBody* rect_ground;
+	PhysBody* background_chain;
 	bool sensed;
 
 	SDL_Texture* circle;
