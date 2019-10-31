@@ -31,6 +31,7 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");*/
 
 	pin_background = App->textures->Load("pinball/background.png");
+	ball_tex = App->textures->Load("pinball/ball.png");
 
 	rect_ground = App->physics->CreateRectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
@@ -45,6 +46,8 @@ bool ModuleSceneIntro::CleanUp()
 	LOG("Unloading Intro scene");
 
 	App->textures->Unload(pin_background);
+	App->textures->Unload(ball_tex);
+
 
 	return true;
 }
@@ -63,7 +66,8 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8));
+		App->renderer->Blit(ball_tex, App->input->GetMouseX(), App->input->GetMouseY());
 		circles.getLast()->data->listener = this;
 	}
 
