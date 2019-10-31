@@ -25,10 +25,12 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	circle = App->textures->Load("pinball/wheel.png"); 
+	/*circle = App->textures->Load("pinball/wheel.png"); 
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");*/
+
+	pin_background = App->textures->Load("pinball/background.png");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
@@ -40,12 +42,16 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
+	App->textures->Unload(pin_background);
+
 	return true;
 }
 
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	App->renderer->Blit(pin_background, 0, 0);
+
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
@@ -164,6 +170,7 @@ update_status ModuleSceneIntro::Update()
 		if(normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
+
 
 	return UPDATE_CONTINUE;
 }
