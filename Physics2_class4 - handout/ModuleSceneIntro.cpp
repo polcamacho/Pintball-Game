@@ -402,5 +402,7 @@ void ModuleSceneIntro::AddBodies() {
 	bumper.add(App->physics->CreateCircle(135, 100, 8, false));
 
 	//flippers
-	flipper_left.add(App->physics->CreateRectangle(97, 340, 40, 10));
+	flipper_left.add(App->physics->CreateRectangle(102, 340, 40, 10));
+	flipper_right.add(App->physics->CreateRectangle(142, 340, 40, 10));
+
 }
