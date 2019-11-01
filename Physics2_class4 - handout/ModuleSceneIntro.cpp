@@ -6,12 +6,15 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModulePlayer.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	circle = box = rick = NULL;
 	ray_on = false;
 	sensed = false;
+	ball = NULL;
+	ball_tex = nullptr;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -31,7 +34,7 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");*/
 
 	pin_background = App->textures->Load("pinball/background.png");
-	ball_tex = App->textures->Load("pinball/ball.png");
+	ball_tex = App->textures->Load("pinball/ball2.png");
 
 	rect_ground = App->physics->CreateRectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
@@ -48,7 +51,6 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(pin_background);
 	App->textures->Unload(ball_tex);
 
-
 	return true;
 }
 
@@ -56,6 +58,12 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(pin_background, 0, 0);
+	if (ball != nullptr)
+	{
+		int x, y;
+		ball->GetPosition(x, y);
+	}
+	
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -66,7 +74,8 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 7));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6));
+
 		circles.getLast()->data->listener = this;
 	}
 
@@ -132,8 +141,8 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
+		
+		App->renderer->Blit(ball_tex, x, y, NULL, 1.0f);
 		c = c->next;
 	}
 
