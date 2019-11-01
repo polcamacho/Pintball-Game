@@ -26,8 +26,8 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 	p2List<PhysBody*> bumper;
-	p2List<PhysBody*> flipper_left;
-	p2List<PhysBody*> flipper_right;
+	PhysBody* flipper_left;
+	PhysBody* flipper_right;
 
 
 	PhysBody* sensor;
