@@ -202,7 +202,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 void ModuleSceneIntro::SetChain(){
 	// Pivot 0, 0
-	int background[34] = {
+	int background[48] = {
 		11, 395,
 		11, 195,
 		7, 170,
@@ -219,7 +219,14 @@ void ModuleSceneIntro::SetChain(){
 		235, 106,
 		245, 130,
 		247, 158,
-		247, 390
+		247, 390,
+		206, 391,
+		181, 371,
+		151, 390,
+		113, 368,
+		104, 391,
+		55, 390,
+		11, 395
 	};
-	background_chain = App->physics->CreateChain(0, 0, background, 20);
+	background_chain = App->physics->CreateChain(0, 0, background, 50);
 }
