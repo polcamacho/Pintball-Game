@@ -42,7 +42,7 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic);
+	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic, float velocity);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
@@ -52,7 +52,7 @@ public:
 
 private:
 
-	bool debug;
+	bool debug = false;
 	b2World* world;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;

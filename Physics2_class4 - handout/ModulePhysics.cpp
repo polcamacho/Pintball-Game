@@ -16,7 +16,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -62,7 +62,7 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic, float velocity)
 {
 	b2BodyDef body;
 	if (dynamic)
@@ -78,6 +78,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
+	fixture.restitution = velocity;
 
 	b->CreateFixture(&fixture);
 

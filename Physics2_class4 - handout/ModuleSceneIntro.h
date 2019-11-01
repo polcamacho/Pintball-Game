@@ -47,6 +47,7 @@ public:
 
 	bool sensed;
 	bool start;
+	bool reboted;
 
 	float power_ball = 17;
 
@@ -60,6 +61,7 @@ public:
 	SDL_Texture* flipper_left_tex;
 	SDL_Texture* flipper_right_tex;
 	SDL_Texture* tunnel_tex;
+	SDL_Texture* title;
 	
 	uint start_fx;
 	uint ball_throw_fx;

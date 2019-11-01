@@ -37,26 +37,15 @@ bool ModuleSceneIntro::Start()
 	flipper_left_tex = App->textures->Load("pinball/flipper_left.png");
 	flipper_right_tex = App->textures->Load("pinball/flipper_right.png");
 	tunnel_tex = App->textures->Load("pinball/tunnel.png");
-
+	title = App->textures->Load("pinball/title.png");
 	ball_throw_fx = App->audio->LoadFx("pinball/Sound/ball_trow.wav");
 	start_fx = App->audio->LoadFx("pinball/Sound/start.wav");
 
 	App->audio->PlayFx(start_fx);
 
-	
-	ball = App->physics->CreateCircle(241, 340, 5, true);
-
-	rect_ground = App->physics->CreateRectangleSensor(241, 363, 10, 5);
-	rect_ground->listener = this;
-
-	sensor = App->physics->CreateRectangleSensor(123, SCREEN_HEIGHT, SCREEN_WIDTH/4, 24);
-	sensor->listener = this;
-
-
-	SetChain();
 	AddBodies();
-
-
+	SetChain();
+	
 	power_ball = 0;
 
 	return ret;
@@ -81,12 +70,12 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	App->renderer->Blit(pin_background, 0, 0);
+	//App->renderer->Blit(pin_background, 0, 0);
 	//ball
 	int x, y;
 	ball->GetPosition(x, y);
 
-	App->renderer->Blit(ball_tex, x, y);
+	
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
@@ -114,35 +103,14 @@ update_status ModuleSceneIntro::Update()
 		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
 		sensed = false;
 	}
-
-	/*{
-		int x, y;
-
-		flipper_left->GetPosition(x,y);
-		App->renderer->Blit(flipper_left_tex, x, y, NULL, 1.0f, RADTODEG * flipper_left->GetRotation());
-	}*/
-
-	/*angle = flipper_right->body->GetAngle();
-	App->renderer->Blit(App->player->imgflipperright, 171, 530, NULL, 1.0f, RADTODEG *angle + 18, 45, 10);*/
-
-	
-	App->renderer->Blit(tunnel_tex, 90, 35);
-
 	
 
-	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		ray_on = !ray_on;
-		ray.x = App->input->GetMouseX();
-		ray.y = App->input->GetMouseY();
-	}*/
-
-	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 5, true));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 5, true, 0.0f));
 
 		circles.getLast()->data->listener = this;
-	}*/
+	}
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -154,18 +122,7 @@ update_status ModuleSceneIntro::Update()
 	fVector normal(0.0f, 0.0f);
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = bumper.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-
-		App->renderer->Blit(bounce_tex, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-	
-	c = circles.getFirst();
+	p2List_item<PhysBody*>* c = circles.getFirst();
 
 	while(c != NULL)
 	{
@@ -193,15 +150,10 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	c = ricks.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
+	App->renderer->Blit(pin_background, 0, 0);
+	App->renderer->Blit(ball_tex, x, y);
+	App->renderer->Blit(tunnel_tex, 90, 35);
+	
 
 	c = flipper_left.getFirst();
 
@@ -236,6 +188,17 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
+	p2List_item<PhysBody*>* bounce = bumper.getFirst();
+
+	while (bounce != nullptr)
+	{
+		int x, y;
+		bounce->data->GetPosition(x, y);
+		App->renderer->Blit(bounce_tex, x, y);
+		bounce = bounce->next;
+	}
+
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -258,6 +221,30 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 
 	}
+
+	if (bodyA->body->GetFixtureList()->IsSensor())
+	{
+	ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
+	}
+
+	p2List_item<PhysBody*>* item = bumper.getFirst();
+
+	while (item != nullptr)
+	{
+		if (bodyB == item->data)
+		{
+			reboted = true;
+		}
+		item = item->next;
+	}
+
+	if (reboted)
+	{
+		//App->player->score += 100;
+		//App->audio->PlayFx(AUDIO);
+		reboted = false;
+	}
+
 }
 
 void ModuleSceneIntro::SetChain(){
@@ -386,23 +373,44 @@ void ModuleSceneIntro::SetChain(){
 	};
 
 	background_chain6 = App->physics->CreateChain(0, 0, lateral_down_right, 16);
-
+	
 
 }
 
 void ModuleSceneIntro::AddBodies() {
+	
+	//BAll
+	ball = App->physics->CreateCircle(241, 340, 5, true, 0.0f);
+
+	//Sensor Start
+	rect_ground = App->physics->CreateRectangleSensor(241, 363, 10, 5);
+	rect_ground->listener = this;
+
+	//Death Sensor
+	sensor = App->physics->CreateRectangleSensor(123, SCREEN_HEIGHT, SCREEN_WIDTH / 4, 24);
+	sensor->listener = this;
 
 	//bumpers
-	bumper.add(App->physics->CreateCircle(80, 125, 8, false));
-	bumper.add(App->physics->CreateCircle(40, 120, 8, false));
-	bumper.add(App->physics->CreateCircle(200, 130, 8, false));
-	bumper.add(App->physics->CreateCircle(60, 195, 8, false));
-	bumper.add(App->physics->CreateCircle(110, 180, 8, false));
-	bumper.add(App->physics->CreateCircle(65, 280, 8, false));
-	bumper.add(App->physics->CreateCircle(195, 175, 8, false));
-	bumper.add(App->physics->CreateCircle(100, 220, 8, false));
-	bumper.add(App->physics->CreateCircle(150, 200, 8, false));
-	bumper.add(App->physics->CreateCircle(135, 100, 8, false));
+	p2List_item<PhysBody*>* item;
+
+	bumper.add(App->physics->CreateCircle(80, 125, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(40, 120, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(200, 130, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(60, 195, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(110, 180, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(65, 280, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(195, 175, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(100, 220, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(150, 200, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(135, 100, 8, false, 1.5f));
+
+	item = bumper.getFirst();
+
+	while (item != nullptr)
+	{
+		item->data->listener = this;
+		item = item->next;
+	}
 
 	//flippers
 	flipper_left.add(App->physics->CreateRectangle(102, 340, 40, 10));
