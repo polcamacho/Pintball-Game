@@ -37,6 +37,12 @@ bool ModuleSceneIntro::Start()
 	flipper_left_tex = App->textures->Load("pinball/flipper_left.png");
 	flipper_right_tex = App->textures->Load("pinball/flipper_right.png");
 	tunnel_tex = App->textures->Load("pinball/tunnel.png");
+
+	ball_throw_fx = App->audio->LoadFx("pinball/Sound/ball_trow.wav");
+	start_fx = App->audio->LoadFx("pinball/Sound/start.wav");
+
+	App->audio->PlayFx(start_fx);
+
 	
 	ball = App->physics->CreateCircle(241, 340, 5, true);
 
@@ -69,7 +75,6 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(flipper_left_tex);
 	App->textures->Unload(tunnel_tex);
 
-
 	return true;
 }
 
@@ -77,9 +82,6 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(pin_background, 0, 0);
-
-
-	
 	//ball
 	int x, y;
 	ball->GetPosition(x, y);
@@ -99,6 +101,7 @@ update_status ModuleSceneIntro::Update()
 		{
 			
 			ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
+			App->audio->PlayFx(ball_throw_fx);
 			start = false;
 		}
 
@@ -241,7 +244,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	App->audio->PlayFx(bonus_fx);
+	//App->audio->PlayFx(bonus_fx);
 
 	if (bodyA->body->GetFixtureList()->IsSensor())
 	{

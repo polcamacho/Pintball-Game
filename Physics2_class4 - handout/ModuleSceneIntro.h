@@ -48,6 +48,9 @@ public:
 	bool sensed;
 	bool start;
 
+	float power_ball = 17;
+
+
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
@@ -57,10 +60,9 @@ public:
 	SDL_Texture* flipper_left_tex;
 	SDL_Texture* flipper_right_tex;
 	SDL_Texture* tunnel_tex;
-
-
-	float power_ball = 17;
-	uint bonus_fx;
+	
+	uint start_fx;
+	uint ball_throw_fx;
 
 	p2Point<int> ray;
 	bool ray_on;
