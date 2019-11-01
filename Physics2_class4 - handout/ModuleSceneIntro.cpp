@@ -115,15 +115,6 @@ update_status ModuleSceneIntro::Update()
 		sensed = false;
 	}
 
-	/*{
-		int x, y;
-
-		flipper_left->GetPosition(x,y);
-		App->renderer->Blit(flipper_left_tex, x, y, NULL, 1.0f, RADTODEG * flipper_left->GetRotation());
-	}*/
-
-	/*angle = flipper_right->body->GetAngle();
-	App->renderer->Blit(App->player->imgflipperright, 171, 530, NULL, 1.0f, RADTODEG *angle + 18, 45, 10);*/
 
 	
 	App->renderer->Blit(tunnel_tex, 90, 35);
@@ -405,7 +396,33 @@ void ModuleSceneIntro::AddBodies() {
 	bumper.add(App->physics->CreateCircle(135, 100, 8, false));
 
 	//flippers
-	flipper_left.add(App->physics->CreateRectangle(102, 340, 40, 10));
-	flipper_right.add(App->physics->CreateRectangle(142, 340, 40, 10));
+	flipper_left.add(App->physics->CreateRectangle(102, 340, 30, 7, true));
+	flipper_right.add(App->physics->CreateRectangle(142, 340, 30, 7, true));
 
+	ball_flipper_left = App->physics->CreateCircle(83, 342, 2, false);
+	ball_flipper_right = App->physics->CreateCircle(162, 342, 2, false);
+
+}
+
+void ModuleSceneIntro::CreateJoints() {
+
+	b2RevoluteJointDef joint_def_left;
+	b2RevoluteJointDef joint_def_right;
+
+	b2RevoluteJoint* joint_left_flipper;
+	b2RevoluteJoint* joint_right_flipper;
+
+	joint_def_left.Initialize(Fflipper_left->body, ball_flipper_left->body, ball_flipper_left->body->GetWorldCenter());
+	joint_def_right.Initialize(Fflipper_right->body, ball_flipper_right->body, ball_flipper_right->body->GetWorldCenter());
+
+	joint_def_left.enableLimit = true;
+	joint_def_right.enableLimit = true;
+
+	joint_def_left.lowerAngle = -0.523599;
+	joint_def_left.upperAngle = 0.523599;
+	joint_def_right.lowerAngle = -0.523599;
+	joint_def_right.upperAngle = 0.523599;
+
+	joint_left_flipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&joint_def_left);
+	joint_right_flipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&joint_def_right);
 }

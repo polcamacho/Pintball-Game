@@ -89,7 +89,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, bool dynamic)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
