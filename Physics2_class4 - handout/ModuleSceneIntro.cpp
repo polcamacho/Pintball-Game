@@ -100,8 +100,7 @@ update_status ModuleSceneIntro::Update()
 	if (sensed == true)
 	{
 		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
-		ball->body->SetLinearVelocity({ 0,0 });//////////////////////
-
+		
 		sensed = false;
 	}
 
