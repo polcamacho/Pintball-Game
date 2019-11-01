@@ -38,11 +38,19 @@ bool ModuleSceneIntro::Start()
 	pin_background = App->textures->Load("pinball/background.png");
 	ball_tex = App->textures->Load("pinball/ball2.png");
 	bounce_tex = App->textures->Load("pinball/Bounce.png");
-	rect_ground = App->physics->CreateRectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	//rect_ground = App->physics->CreateRectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+
+	ball = App->physics->CreateCircle(241, 340, 5, true);
+
+	rect_ground = App->physics->CreateRectangleSensor(241, 363, 10, 5);
+	rect_ground->listener = this;
+
+	sensor = App->physics->CreateRectangleSensor(123, SCREEN_HEIGHT, SCREEN_WIDTH/4, 24);
+	sensor->listener = this;
 
 	SetChain();
 	
-	
+	power_ball = 0;
 
 	return ret;
 }
@@ -69,15 +77,48 @@ update_status ModuleSceneIntro::Update()
 		ball->GetPosition(x, y);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		power_ball = 18;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	{
+
+
+		if (start == true)
+		{
+			
+			ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
+			start = false;
+		}
+
+		power_ball = 0;
+
+	}
+
+	if (sensed == true)
+	{
+		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
+		ball->body->SetLinearVelocity({ 0,0 });//////////////////////
+
+		sensed = false;
+	}
+
+	
+	int x, y;
+	ball->GetPosition(x, y);
+
+	App->renderer->Blit(ball_tex, x, y);
 	
 	
 
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
 		ray.x = App->input->GetMouseX();
 		ray.y = App->input->GetMouseY();
-	}
+	}*/
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -168,18 +209,18 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	App->audio->PlayFx(bonus_fx);
 
-	/*
-	if(bodyA)
+	if (bodyA->body->GetFixtureList()->IsSensor())
 	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		{
+			start = true;
+		}
+		if (bodyA == sensor)
+		{
+			sensed = true;
+		}
 
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
+	}
 }
 
 void ModuleSceneIntro::SetChain(){

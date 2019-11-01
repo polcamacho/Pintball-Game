@@ -40,6 +40,7 @@ public:
 	p2List<PhysBody*> bumper;
 
 	bool sensed;
+	bool start;
 
 	SDL_Texture* circle;
 	SDL_Texture* box;
@@ -48,7 +49,11 @@ public:
 	SDL_Texture* ball_tex;
 	SDL_Texture* bounce_tex;
 
+	float power_ball = 19;
 	uint bonus_fx;
+
 	p2Point<int> ray;
 	bool ray_on;
+
+	
 };
