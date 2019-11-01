@@ -27,6 +27,9 @@ public:
 	PhysBody* sensor;
 	PhysBody* rect_ground;
 	PhysBody* background_chain;
+	PhysBody* background_chain2;
+	PhysBody* background_chain3;
+	PhysBody* background_chain4;
 	bool sensed;
 
 	SDL_Texture* circle;
