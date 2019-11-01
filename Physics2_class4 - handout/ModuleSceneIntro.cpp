@@ -16,7 +16,8 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ball = NULL;
 	ball_tex = nullptr;
 	bounce_tex = nullptr;
-	
+	flipper_left_tex = nullptr;
+	flipper_right_tex = nullptr;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -29,17 +30,14 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-
-	/*circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");*/
-
+	
 	pin_background = App->textures->Load("pinball/background.png");
 	ball_tex = App->textures->Load("pinball/ball2.png");
 	bounce_tex = App->textures->Load("pinball/Bounce.png");
-	//rect_ground = App->physics->CreateRectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
-
+	flipper_left_tex = App->textures->Load("pinball/flipper_left.png");
+	flipper_right_tex = App->textures->Load("pinball/flipper_right.png");
+	tunnel_tex = App->textures->Load("pinball/tunnel.png");
+	
 	ball = App->physics->CreateCircle(241, 340, 5, true);
 
 	rect_ground = App->physics->CreateRectangleSensor(241, 363, 10, 5);
@@ -48,8 +46,11 @@ bool ModuleSceneIntro::Start()
 	sensor = App->physics->CreateRectangleSensor(123, SCREEN_HEIGHT, SCREEN_WIDTH/4, 24);
 	sensor->listener = this;
 
+
 	SetChain();
-	
+	AddBodies();
+
+
 	power_ball = 0;
 
 	return ret;
@@ -63,6 +64,12 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(pin_background);
 	App->textures->Unload(ball_tex);
 	App->textures->Unload(bounce_tex);
+	App->textures->Unload(flipper_left_tex);
+	App->textures->Unload(flipper_right_tex);
+	App->textures->Unload(flipper_left_tex);
+	App->textures->Unload(tunnel_tex);
+
+
 	return true;
 }
 
@@ -70,12 +77,14 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(pin_background, 0, 0);
+
+
 	
-	if (ball != nullptr)
-	{
-		int x, y;
-		ball->GetPosition(x, y);
-	}
+	//ball
+	int x, y;
+	ball->GetPosition(x, y);
+
+	App->renderer->Blit(ball_tex, x, y);
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
@@ -100,17 +109,23 @@ update_status ModuleSceneIntro::Update()
 	if (sensed == true)
 	{
 		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
-		ball->body->SetLinearVelocity({ 0,0 });//////////////////////
 
 		sensed = false;
 	}
 
-	
-	int x, y;
-	ball->GetPosition(x, y);
+	/*{
+		int x, y;
 
-	App->renderer->Blit(ball_tex, x, y);
+		flipper_left->GetPosition(x,y);
+		App->renderer->Blit(flipper_left_tex, x, y, NULL, 1.0f, RADTODEG * flipper_left->GetRotation());
+	}*/
+
+	/*angle = flipper_right->body->GetAngle();
+	App->renderer->Blit(App->player->imgflipperright, 171, 530, NULL, 1.0f, RADTODEG *angle + 18, 45, 10);*/
+
 	
+	App->renderer->Blit(tunnel_tex, 90, 35);
+
 	
 
 	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -120,12 +135,12 @@ update_status ModuleSceneIntro::Update()
 		ray.y = App->input->GetMouseY();
 	}*/
 
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 5, true));
 
 		circles.getLast()->data->listener = this;
-	}
+	}*/
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -178,11 +193,31 @@ update_status ModuleSceneIntro::Update()
 
 	c = ricks.getFirst();
 
-	while(c != NULL)
+	while (c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
+	c = flipper_left.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(flipper_left_tex, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
+	c = flipper_right.getFirst();
+
+	while(c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(flipper_right_tex, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 
@@ -350,6 +385,12 @@ void ModuleSceneIntro::SetChain(){
 
 	background_chain6 = App->physics->CreateChain(0, 0, lateral_down_right, 16);
 
+
+}
+
+void ModuleSceneIntro::AddBodies() {
+
+	//bumpers
 	bumper.add(App->physics->CreateCircle(80, 125, 8, false));
 	bumper.add(App->physics->CreateCircle(40, 120, 8, false));
 	bumper.add(App->physics->CreateCircle(200, 130, 8, false));
@@ -361,4 +402,6 @@ void ModuleSceneIntro::SetChain(){
 	bumper.add(App->physics->CreateCircle(150, 200, 8, false));
 	bumper.add(App->physics->CreateCircle(135, 100, 8, false));
 
+	//flippers
+	flipper_left.add(App->physics->CreateRectangle(97, 340, 40, 10));
 }

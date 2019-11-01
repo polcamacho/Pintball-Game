@@ -17,27 +17,33 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void SetChain();
+	void AddBodies();
 
 
 public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
+	p2List<PhysBody*> bumper;
+	p2List<PhysBody*> flipper_left;
+	p2List<PhysBody*> flipper_right;
+
 
 	PhysBody* sensor;
 	PhysBody* rect_ground;
-	
 	PhysBody* background_chain;
-
 	PhysBody* background_chain2;
 	PhysBody* background_chain3;
 	PhysBody* background_chain4;
 	PhysBody* background_chain5;
 	PhysBody* background_chain6;
+	PhysBody* ball_flipper_left;
+	PhysBody* ball_flipper_right;
+	/*PhysBody* flipper_left;
+	PhysBody* flipper_right;*/
 
 	PhysBody* ball;
 
-	p2List<PhysBody*> bumper;
 
 	bool sensed;
 	bool start;
@@ -48,8 +54,12 @@ public:
 	SDL_Texture* pin_background;
 	SDL_Texture* ball_tex;
 	SDL_Texture* bounce_tex;
+	SDL_Texture* flipper_left_tex;
+	SDL_Texture* flipper_right_tex;
+	SDL_Texture* tunnel_tex;
 
-	float power_ball = 19;
+
+	float power_ball = 17;
 	uint bonus_fx;
 
 	p2Point<int> ray;
