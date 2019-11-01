@@ -103,6 +103,7 @@ update_status ModuleSceneIntro::Update()
 		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
 		sensed = false;
 	}
+
 	
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -413,7 +414,33 @@ void ModuleSceneIntro::AddBodies() {
 	}
 
 	//flippers
-	flipper_left.add(App->physics->CreateRectangle(102, 340, 40, 10));
-	flipper_right.add(App->physics->CreateRectangle(142, 340, 40, 10));
+	flipper_left.add(App->physics->CreateRectangle(102, 340, 30, 7, true));
+	flipper_right.add(App->physics->CreateRectangle(142, 340, 30, 7, true));
 
+	ball_flipper_left = App->physics->CreateCircle(83, 342, 2, false, 0.5f);
+	ball_flipper_right = App->physics->CreateCircle(162, 342, 2, false, 0.5f);
+
+}
+
+void ModuleSceneIntro::CreateJoints() {
+
+	b2RevoluteJointDef joint_def_left;
+	b2RevoluteJointDef joint_def_right;
+
+	b2RevoluteJoint* joint_left_flipper;
+	b2RevoluteJoint* joint_right_flipper;
+
+	joint_def_left.Initialize(Fflipper_left->body, ball_flipper_left->body, ball_flipper_left->body->GetWorldCenter());
+	joint_def_right.Initialize(Fflipper_right->body, ball_flipper_right->body, ball_flipper_right->body->GetWorldCenter());
+
+	joint_def_left.enableLimit = true;
+	joint_def_right.enableLimit = true;
+
+	joint_def_left.lowerAngle = -0.523599;
+	joint_def_left.upperAngle = 0.523599;
+	joint_def_right.lowerAngle = -0.523599;
+	joint_def_right.upperAngle = 0.523599;
+
+	joint_left_flipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&joint_def_left);
+	joint_right_flipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&joint_def_right);
 }

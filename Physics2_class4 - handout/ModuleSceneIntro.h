@@ -18,6 +18,7 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void SetChain();
 	void AddBodies();
+	void CreateJoints();
 
 
 public:
@@ -39,6 +40,12 @@ public:
 	PhysBody* background_chain6;
 	PhysBody* ball_flipper_left;
 	PhysBody* ball_flipper_right;
+
+	PhysBody* Fflipper_left;
+	PhysBody* Fflipper_right;
+
+
+
 	/*PhysBody* flipper_left;
 	PhysBody* flipper_right;*/
 

@@ -42,18 +42,22 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
+
 	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic, float velocity);
-	PhysBody* CreateRectangle(int x, int y, int width, int height);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, bool dynamic);
+
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
+	b2World* world;
+
 private:
 
 	bool debug = false;
-	b2World* world;
+	
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 };
