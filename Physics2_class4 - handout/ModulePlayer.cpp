@@ -4,6 +4,8 @@
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	//ball = nullptr;
+	//ball_tex = NULL;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -13,6 +15,8 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
+
+
 	return true;
 }
 
