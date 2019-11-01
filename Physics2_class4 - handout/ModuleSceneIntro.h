@@ -26,14 +26,18 @@ public:
 
 	PhysBody* sensor;
 	PhysBody* rect_ground;
+	
 	PhysBody* background_chain;
 
 	PhysBody* background_chain2;
 	PhysBody* background_chain3;
 	PhysBody* background_chain4;
+	PhysBody* background_chain5;
+	PhysBody* background_chain6;
 
 	PhysBody* ball;
 
+	p2List<PhysBody*> bumper;
 
 	bool sensed;
 
@@ -42,7 +46,7 @@ public:
 	SDL_Texture* rick;
 	SDL_Texture* pin_background;
 	SDL_Texture* ball_tex;
-
+	SDL_Texture* bounce_tex;
 
 	uint bonus_fx;
 	p2Point<int> ray;

@@ -15,6 +15,8 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	sensed = false;
 	ball = NULL;
 	ball_tex = nullptr;
+	bounce_tex = nullptr;
+	
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -35,11 +37,13 @@ bool ModuleSceneIntro::Start()
 
 	pin_background = App->textures->Load("pinball/background.png");
 	ball_tex = App->textures->Load("pinball/ball2.png");
-
+	bounce_tex = App->textures->Load("pinball/Bounce.png");
 	rect_ground = App->physics->CreateRectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
 	SetChain();
 	
+	
+
 	return ret;
 }
 
@@ -50,7 +54,7 @@ bool ModuleSceneIntro::CleanUp()
 
 	App->textures->Unload(pin_background);
 	App->textures->Unload(ball_tex);
-
+	App->textures->Unload(bounce_tex);
 	return true;
 }
 
@@ -58,11 +62,14 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(pin_background, 0, 0);
+	
 	if (ball != nullptr)
 	{
 		int x, y;
 		ball->GetPosition(x, y);
 	}
+
+	
 	
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -74,55 +81,9 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 5, true));
 
 		circles.getLast()->data->listener = this;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
-
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 	}
 
 	// Prepare for raycast ------------------------------------------------------
@@ -135,7 +96,18 @@ update_status ModuleSceneIntro::Update()
 	fVector normal(0.0f, 0.0f);
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
+	p2List_item<PhysBody*>* c = bumper.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		App->renderer->Blit(bounce_tex, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+	
+	c = circles.getFirst();
 
 	while(c != NULL)
 	{
@@ -143,6 +115,7 @@ update_status ModuleSceneIntro::Update()
 		c->data->GetPosition(x, y);
 		
 		App->renderer->Blit(ball_tex, x, y, NULL, 1.0f);
+
 		c = c->next;
 	}
 
@@ -271,35 +244,80 @@ void ModuleSceneIntro::SetChain(){
 
 	background_chain3 = App->physics->CreateChain(0, 0, laterals_balldrop2, 8);
 
-	/*int ball_tube[52] = {
-	235, 361,
-	235, 223,
-	235, 156,
-	233, 137,
-	230, 126,
-	224, 110,
-	217, 99,
-	206, 85,
-	192, 73,
-	177, 63,
-	162, 57,
-	145, 52,
-	130, 51,
-	130, 51,
-	145, 52,
-	162, 57,
-	177, 63,
-	192, 73,
-	206, 85,
-	217, 99,
-	224, 110,
-	230, 126,
-	233, 137,
-	235, 156,
-	235, 223,
-	235, 361
+	int ball_tube[64] = {
+	86, 59,
+	98, 55,
+	111, 52,
+	128, 50,
+	152, 53,
+	168, 59,
+	180, 64,
+	189, 70,
+	196, 75,
+	205, 84,
+	216, 99,
+	228, 119,
+	233, 136,
+	234, 153,
+	234, 173,
+	235, 362,
+	232, 362,
+	232, 173,
+	232, 153,
+	231, 136,
+	226, 119,
+	214, 99,
+	203, 84,
+	194, 75,
+	187, 70,
+	178, 64,
+	166, 59,
+	149, 54,
+	133, 52,
+	121, 52,
+	106, 54,
+	89, 59
+};
+
+	background_chain4 = App->physics->CreateChain(0, 0, ball_tube, 64);
+
+	int lateral_down_left[20] = {
+	31, 314,
+	43, 319,
+	58, 325,
+	71, 330,
+	84, 335,
+	84, 337,
+	71, 332,
+	58, 327,
+	43, 321,
+	31, 316
+	};
+	
+	background_chain5 = App->physics->CreateChain(0, 0, lateral_down_left, 20);
+
+	int lateral_down_right[16] = {
+	217, 313,
+	195, 321,
+	175, 328,
+	162, 334,
+	162, 335,
+	175, 329,
+	195, 322,
+	217, 314
 	};
 
-	background_chain4 = App->physics->CreateChain(0, 0, ball_tube, 54);*/
+	background_chain6 = App->physics->CreateChain(0, 0, lateral_down_right, 16);
+
+	bumper.add(App->physics->CreateCircle(80, 125, 8, false));
+	bumper.add(App->physics->CreateCircle(40, 120, 8, false));
+	bumper.add(App->physics->CreateCircle(200, 130, 8, false));
+	bumper.add(App->physics->CreateCircle(60, 195, 8, false));
+	bumper.add(App->physics->CreateCircle(110, 180, 8, false));
+	bumper.add(App->physics->CreateCircle(65, 280, 8, false));
+	bumper.add(App->physics->CreateCircle(195, 175, 8, false));
+	bumper.add(App->physics->CreateCircle(100, 220, 8, false));
+	bumper.add(App->physics->CreateCircle(150, 200, 8, false));
+	bumper.add(App->physics->CreateCircle(135, 100, 8, false));
 
 }
