@@ -16,8 +16,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ball = NULL;
 	ball_tex = nullptr;
 	bounce_tex = nullptr;
-	flipper_left_tex = nullptr;
-	flipper_right_tex = nullptr;
+	
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -34,6 +33,8 @@ bool ModuleSceneIntro::Start()
 	pin_background = App->textures->Load("pinball/background.png");
 	ball_tex = App->textures->Load("pinball/ball2.png");
 	bounce_tex = App->textures->Load("pinball/Bounce.png");
+	lateral_bounce_tex = App->textures->Load("pinball/lateral_Bounce_right.png");
+
 	flipper_left_tex = App->textures->Load("pinball/flipper_left.png");
 	flipper_right_tex = App->textures->Load("pinball/flipper_right.png");
 	tunnel_tex = App->textures->Load("pinball/tunnel.png");
@@ -42,12 +43,10 @@ bool ModuleSceneIntro::Start()
 	start_fx = App->audio->LoadFx("pinball/Sound/start.wav");
 
 	App->audio->PlayFx(start_fx);
-
-	AddBodies();
 	CreateJoints();
+	AddBodies();
 	SetChain();
 	
-
 	power_ball = 0;
 
 	return ret;
@@ -73,25 +72,21 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	//App->renderer->Blit(pin_background, 0, 0);
+	
 	//ball
 	int x, y;
 	ball->GetPosition(x, y);
 
-	
-
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		power_ball = 18;
+		power_ball = 6.25;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
 	{
 
-
 		if (start == true)
 		{
-			
 			ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
 			App->audio->PlayFx(ball_throw_fx);
 			start = false;
@@ -101,23 +96,13 @@ update_status ModuleSceneIntro::Update()
 
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
-
-		App->scene_intro->flipper_left->body->ApplyAngularImpulse(-2.0f, true);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
-
-		App->scene_intro->flipper_right->body->ApplyAngularImpulse(2.0f, true);
-	}
+	
 
 	if (sensed == true)
 	{
 		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
 		sensed = false;
 	}
-
-	
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -169,39 +154,18 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(tunnel_tex, 90, 35);
 	App->renderer->Blit(title, 9, 364);
 
-
-	/*c = flipper_left.getFirst();
-
-	while (c != NULL)
+	if (left_flipper != NULL)
 	{
 		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(flipper_left_tex, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
+		left_flipper->GetPosition(x, y);
+		App->renderer->Blit(flipper_left_tex, x, y, NULL, 1.0f, left_flipper->GetRotation());
 	}
 
-	c = flipper_right.getFirst();*/
-
-	/*while(c != NULL)
+	if (right_flipper != NULL)
 	{
 		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(flipper_right_tex, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}*/
-
-	if (flipper_left != NULL)
-	{
-		int x, y;
-		flipper_left->GetPosition(x, y);
-		App->renderer->Blit(flipper_left_tex, x, y, NULL, 1.0f, flipper_left->GetRotation());
-	}
-
-	if (flipper_right != NULL)
-	{
-		int x, y;
-		flipper_right->GetPosition(x, y);
-		App->renderer->Blit(flipper_right_tex, x-10, y, NULL, 1.0f, flipper_right->GetRotation());
+		right_flipper->GetPosition(x, y);
+		App->renderer->Blit(flipper_right_tex, x, y, NULL, 1.0f, right_flipper->GetRotation());
 	}
 
 	// ray -----------------
@@ -227,7 +191,15 @@ update_status ModuleSceneIntro::Update()
 		bounce = bounce->next;
 	}
 
-	
+	p2List_item<PhysBody*>* lateral_bounce = lateral_bumper.getFirst();
+
+	while (lateral_bounce != nullptr)
+	{
+		int x, y;
+		lateral_bounce->data->GetPosition(x, y);
+		App->renderer->Blit(lateral_bounce_tex, x, y);
+		lateral_bounce = lateral_bounce->next;
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -235,8 +207,6 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
-
-	//App->audio->PlayFx(bonus_fx);
 
 	if (bodyA->body->GetFixtureList()->IsSensor())
 	{
@@ -267,6 +237,17 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		item = item->next;
 	}
 
+	p2List_item<PhysBody*>* item2 = lateral_bumper.getFirst();
+
+	while (item2 != nullptr)
+	{
+		if (bodyB == item2->data)
+		{
+			reboted = true;
+		}
+		item2 = item2->next;
+	}
+
 	if (reboted)
 	{
 		//App->player->score += 100;
@@ -277,7 +258,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 }
 
 void ModuleSceneIntro::SetChain(){
-	// Pivot 0, 0
+	
 	int background[74] = {
 	9, 362,
 	11, 197,
@@ -318,7 +299,7 @@ void ModuleSceneIntro::SetChain(){
 	69, 363
 	};
 
-	background_chain = App->physics->CreateChain(0, 0, background, 74);
+	background_chain = App->physics->CreateChain(0, 0, background, false, 74);
 
 	int laterals_balldrop1[8] = {
 	10, 331,
@@ -327,7 +308,7 @@ void ModuleSceneIntro::SetChain(){
 	69, 353
 	};
 
-	background_chain2 = App->physics->CreateChain(0, 0, laterals_balldrop1, 8);
+	background_chain2 = App->physics->CreateChain(0, 0, laterals_balldrop1, false, 8);
 
 	int laterals_balldrop2[8] = {
 	234, 330,
@@ -336,7 +317,7 @@ void ModuleSceneIntro::SetChain(){
 	234, 362
 	};
 
-	background_chain3 = App->physics->CreateChain(0, 0, laterals_balldrop2, 8);
+	background_chain3 = App->physics->CreateChain(0, 0, laterals_balldrop2, false, 8);
 
 	int ball_tube[64] = {
 	86, 59,
@@ -373,7 +354,7 @@ void ModuleSceneIntro::SetChain(){
 	89, 59
 };
 
-	background_chain4 = App->physics->CreateChain(0, 0, ball_tube, 64);
+	background_chain4 = App->physics->CreateChain(0, 0, ball_tube, false, 64);
 
 	int lateral_down_left[20] = {
 	31, 314,
@@ -388,7 +369,7 @@ void ModuleSceneIntro::SetChain(){
 	31, 316
 	};
 	
-	background_chain5 = App->physics->CreateChain(0, 0, lateral_down_left, 20);
+	background_chain5 = App->physics->CreateChain(0, 0, lateral_down_left, false, 20);
 
 	int lateral_down_right[16] = {
 	217, 313,
@@ -401,7 +382,7 @@ void ModuleSceneIntro::SetChain(){
 	217, 314
 	};
 
-	background_chain6 = App->physics->CreateChain(0, 0, lateral_down_right, 16);
+	background_chain6 = App->physics->CreateChain(0, 0, lateral_down_right, false, 16);
 	
 
 }
@@ -441,36 +422,53 @@ void ModuleSceneIntro::AddBodies() {
 		item = item->next;
 	}
 
-	
+	//Lateral bumpers
+
+	p2List_item<PhysBody*>* item2;
+	lateral_bumper.add(App->physics->CreateRectangle(350, 200, 10, 40, false, 1.5f));
+	lateral_bumper.add(App->physics->CreateRectangle(350, 240, 10, 40, false, 1.5f));
+
+	item2 = lateral_bumper.getFirst();
+
+	while (item2 != nullptr)
+	{
+		item2->data->listener = this;
+		item2 = item2->next;
+	}
 
 }
 
 void ModuleSceneIntro::CreateJoints() {
 
-	b2RevoluteJointDef joint_def_left;
-	b2RevoluteJointDef joint_def_right;
+	b2RevoluteJoint* left_flipper_ball_joint;
+	b2RevoluteJoint* right_flipper_ball_joint;
+	b2RevoluteJointDef left_flipper_definition;
+	b2RevoluteJointDef right_flipper_definition;
+	
+	left_flipper = App->physics->CreateRectangle(102, 333, 30, 10, true, 0.0f);
+	right_flipper = App->physics->CreateRectangle(140, 340, 30, 10, true, 0.0f);
+	
+	
+	left_flipper_ball = App->physics->CreateCircle(91, 333, 2, false, 0.25f);
+	right_flipper_ball = App->physics->CreateCircle(155, 340, 2, false, 0.25f);
+	
 
-	b2RevoluteJoint* joint_left_flipper;
-	b2RevoluteJoint* joint_right_flipper;
+	left_flipper_definition.Initialize(left_flipper->body, left_flipper_ball->body, left_flipper_ball->body->GetWorldCenter());
+	right_flipper_definition.Initialize(right_flipper_ball->body, right_flipper->body, right_flipper_ball->body->GetWorldCenter());
+	
 
-	//flippers
-	flipper_left= (App->physics->CreateRectangle(102, 340, 30, 7, true));
-	flipper_right= (App->physics->CreateRectangle(142, 340, 30, 7, true));
+	left_flipper_definition.enableLimit = true;
+	right_flipper_definition.enableLimit = true;
+	
 
-	ball_flipper_left = App->physics->CreateCircle(88, 342, 2, false, 0.5f);
-	ball_flipper_right = App->physics->CreateCircle(155, 342, 2, false, 0.5f);
+	left_flipper_definition.lowerAngle = -30 * DEGTORAD;
+	left_flipper_definition.upperAngle = 30 * DEGTORAD;
+	right_flipper_definition.lowerAngle = -30 * DEGTORAD;
+	right_flipper_definition.upperAngle = 30 * DEGTORAD;
 
-	joint_def_left.Initialize(ball_flipper_left->body, flipper_left->body, ball_flipper_left->body->GetWorldCenter());
-	joint_def_right.Initialize(ball_flipper_right->body, flipper_right->body, ball_flipper_right->body->GetWorldCenter());
+	left_flipper_ball_joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&left_flipper_definition);
+	left_flipper_ball_joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&right_flipper_definition);
+	
 
-	joint_def_left.enableLimit = true;
-	joint_def_right.enableLimit = true;
-
-	joint_def_left.lowerAngle = -0.523599;
-	joint_def_left.upperAngle = 0.523599;
-	joint_def_right.lowerAngle = -0.523599;
-	joint_def_right.upperAngle = 0.523599;
-
-	joint_left_flipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&joint_def_left);
-	joint_right_flipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&joint_def_right);
+	
 }

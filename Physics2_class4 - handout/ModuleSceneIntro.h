@@ -22,33 +22,32 @@ public:
 
 
 public:
+	
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
-	p2List<PhysBody*> bumper;
-	PhysBody* flipper_left;
-	PhysBody* flipper_right;
-
+	
+	
 
 	PhysBody* sensor;
 	PhysBody* rect_ground;
+	p2List<PhysBody*> bumper;
+	p2List<PhysBody*> lateral_bumper;
+
 	PhysBody* background_chain;
 	PhysBody* background_chain2;
 	PhysBody* background_chain3;
 	PhysBody* background_chain4;
 	PhysBody* background_chain5;
 	PhysBody* background_chain6;
-	PhysBody* ball_flipper_left;
-	PhysBody* ball_flipper_right;
 
-	PhysBody* Fflipper_left;
-	PhysBody* Fflipper_right;
-
-
-
-	/*PhysBody* flipper_left;
-	PhysBody* flipper_right;*/
-
+	
+	
+	PhysBody* left_flipper;
+	PhysBody* right_flipper;
+	PhysBody* left_flipper_ball;
+	PhysBody* right_flipper_ball;
+	
 	PhysBody* ball;
 
 
@@ -56,8 +55,7 @@ public:
 	bool start;
 	bool reboted;
 
-	float power_ball = 17;
-
+	float power_ball;
 
 	SDL_Texture* circle;
 	SDL_Texture* box;
@@ -65,6 +63,7 @@ public:
 	SDL_Texture* pin_background;
 	SDL_Texture* ball_tex;
 	SDL_Texture* bounce_tex;
+	SDL_Texture* lateral_bounce_tex;
 	SDL_Texture* flipper_left_tex;
 	SDL_Texture* flipper_right_tex;
 	SDL_Texture* tunnel_tex;

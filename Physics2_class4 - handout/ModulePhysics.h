@@ -44,10 +44,10 @@ public:
 
 
 	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic, float velocity);
-	PhysBody* CreateRectangle(int x, int y, int width, int height, bool dynamic);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, bool dynamic, float velocity);
 
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateChain(int x, int y, int* points, bool dynamic, int size);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
