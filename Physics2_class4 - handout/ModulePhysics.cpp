@@ -147,7 +147,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, bool dynamic, int size)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, bool dynamic, int size, float velocity)
 {
 	b2BodyDef body;
 	if (dynamic)
@@ -171,7 +171,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, bool dynamic, in
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	
+	fixture.restitution = velocity;
 
 	b->CreateFixture(&fixture);
 

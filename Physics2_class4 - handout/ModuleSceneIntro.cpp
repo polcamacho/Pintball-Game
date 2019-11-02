@@ -33,7 +33,8 @@ bool ModuleSceneIntro::Start()
 	pin_background = App->textures->Load("pinball/background.png");
 	ball_tex = App->textures->Load("pinball/ball2.png");
 	bounce_tex = App->textures->Load("pinball/Bounce.png");
-	lateral_bounce_tex = App->textures->Load("pinball/lateral_Bounce_right.png");
+	lateral_bounce_right_tex = App->textures->Load("pinball/lateral_Bounce_right.png");
+	lateral_bounce_left_tex = App->textures->Load("pinball/lateral_Bounce_left.png");
 
 	flipper_left_tex = App->textures->Load("pinball/flipper_left.png");
 	flipper_right_tex = App->textures->Load("pinball/flipper_right.png");
@@ -191,14 +192,24 @@ update_status ModuleSceneIntro::Update()
 		bounce = bounce->next;
 	}
 
-	p2List_item<PhysBody*>* lateral_bounce = lateral_bumper.getFirst();
+	p2List_item<PhysBody*>* lateral_bounce_right = lateral_bumper_right.getFirst();
 
-	while (lateral_bounce != nullptr)
+	while (lateral_bounce_right != nullptr)
 	{
 		int x, y;
-		lateral_bounce->data->GetPosition(x, y);
-		App->renderer->Blit(lateral_bounce_tex, x, y);
-		lateral_bounce = lateral_bounce->next;
+		lateral_bounce_right->data->GetPosition(x, y);
+		App->renderer->Blit(lateral_bounce_right_tex, x, y);
+		lateral_bounce_right = lateral_bounce_right->next;
+	}
+
+	p2List_item<PhysBody*>* lateral_bounce_left = lateral_bumper_left.getFirst();
+
+	while (lateral_bounce_left != nullptr)
+	{
+		int x, y;
+		lateral_bounce_left->data->GetPosition(x, y);
+		App->renderer->Blit(lateral_bounce_left_tex, x, y);
+		lateral_bounce_left = lateral_bounce_left->next;
 	}
 
 	return UPDATE_CONTINUE;
@@ -221,6 +232,16 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	{
+		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.5f, true);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.5f, true);
+	}
+
 	if (bodyA->body->GetFixtureList()->IsSensor())
 	{
 	ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
@@ -237,7 +258,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		item = item->next;
 	}
 
-	p2List_item<PhysBody*>* item2 = lateral_bumper.getFirst();
+	p2List_item<PhysBody*>* item2 = lateral_bumper_right.getFirst();
 
 	while (item2 != nullptr)
 	{
@@ -246,6 +267,17 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			reboted = true;
 		}
 		item2 = item2->next;
+	}
+
+	p2List_item<PhysBody*>* item3 = lateral_bumper_left.getFirst();
+
+	while (item3 != nullptr)
+	{
+		if (bodyB == item3->data)
+		{
+			reboted = true;
+		}
+		item3 = item3->next;
 	}
 
 	if (reboted)
@@ -299,7 +331,7 @@ void ModuleSceneIntro::SetChain(){
 	69, 363
 	};
 
-	background_chain = App->physics->CreateChain(0, 0, background, false, 74);
+	background_chain = App->physics->CreateChain(0, 0, background, false, 74, 0.0f);
 
 	int laterals_balldrop1[8] = {
 	10, 331,
@@ -308,7 +340,7 @@ void ModuleSceneIntro::SetChain(){
 	69, 353
 	};
 
-	background_chain2 = App->physics->CreateChain(0, 0, laterals_balldrop1, false, 8);
+	background_chain2 = App->physics->CreateChain(0, 0, laterals_balldrop1, false, 8, 0.0f);
 
 	int laterals_balldrop2[8] = {
 	234, 330,
@@ -317,7 +349,7 @@ void ModuleSceneIntro::SetChain(){
 	234, 362
 	};
 
-	background_chain3 = App->physics->CreateChain(0, 0, laterals_balldrop2, false, 8);
+	background_chain3 = App->physics->CreateChain(0, 0, laterals_balldrop2, false, 8, 0.0f);
 
 	int ball_tube[64] = {
 	86, 59,
@@ -354,7 +386,7 @@ void ModuleSceneIntro::SetChain(){
 	89, 59
 };
 
-	background_chain4 = App->physics->CreateChain(0, 0, ball_tube, false, 64);
+	background_chain4 = App->physics->CreateChain(0, 0, ball_tube, false, 64, 0.0f);
 
 	int lateral_down_left[20] = {
 	31, 314,
@@ -369,7 +401,7 @@ void ModuleSceneIntro::SetChain(){
 	31, 316
 	};
 	
-	background_chain5 = App->physics->CreateChain(0, 0, lateral_down_left, false, 20);
+	background_chain5 = App->physics->CreateChain(0, 0, lateral_down_left, false, 20, 0.0f);
 
 	int lateral_down_right[16] = {
 	217, 313,
@@ -382,7 +414,7 @@ void ModuleSceneIntro::SetChain(){
 	217, 314
 	};
 
-	background_chain6 = App->physics->CreateChain(0, 0, lateral_down_right, false, 16);
+	background_chain6 = App->physics->CreateChain(0, 0, lateral_down_right, false, 16, 0.0f);
 	
 
 }
@@ -425,16 +457,45 @@ void ModuleSceneIntro::AddBodies() {
 	//Lateral bumpers
 
 	p2List_item<PhysBody*>* item2;
-	lateral_bumper.add(App->physics->CreateRectangle(350, 200, 10, 40, false, 1.5f));
-	lateral_bumper.add(App->physics->CreateRectangle(350, 240, 10, 40, false, 1.5f));
 
-	item2 = lateral_bumper.getFirst();
+	int lateral_Bounce_right[10] = {
+	26, 1,
+	26, 61,
+	1, 48,
+	1, 19,
+	5, 11
+	};
+	
+	lateral_bumper_right.add(App->physics->CreateChain(300, 200, lateral_Bounce_right, false, 10, 1.5f));
+	
+	item2 = lateral_bumper_right.getFirst();
 
 	while (item2 != nullptr)
 	{
 		item2->data->listener = this;
 		item2 = item2->next;
 	}
+	
+	p2List_item<PhysBody*>* item3;
+
+	int lateral_Bounce_left[10] = {
+	0, 1,
+	0, 60,
+	24, 49,
+	24, 18,
+	20, 11
+	};
+	
+	lateral_bumper_left.add(App->physics->CreateChain(340, 200, lateral_Bounce_left, false, 10, 1.5f));
+		
+	item3 = lateral_bumper_left.getFirst();
+
+	while (item3 != nullptr)
+	{
+		item3->data->listener = this;
+		item3 = item3->next;
+	}
+
 
 }
 

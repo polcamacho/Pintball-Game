@@ -39,15 +39,7 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update()
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.5f, true);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.5f, true);
-	}
+	
 
 	return UPDATE_CONTINUE;
 }

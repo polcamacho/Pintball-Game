@@ -32,7 +32,8 @@ public:
 	PhysBody* sensor;
 	PhysBody* rect_ground;
 	p2List<PhysBody*> bumper;
-	p2List<PhysBody*> lateral_bumper;
+	p2List<PhysBody*> lateral_bumper_right;
+	p2List<PhysBody*> lateral_bumper_left;
 
 	PhysBody* background_chain;
 	PhysBody* background_chain2;
@@ -63,7 +64,8 @@ public:
 	SDL_Texture* pin_background;
 	SDL_Texture* ball_tex;
 	SDL_Texture* bounce_tex;
-	SDL_Texture* lateral_bounce_tex;
+	SDL_Texture* lateral_bounce_left_tex;
+	SDL_Texture* lateral_bounce_right_tex;
 	SDL_Texture* flipper_left_tex;
 	SDL_Texture* flipper_right_tex;
 	SDL_Texture* tunnel_tex;
