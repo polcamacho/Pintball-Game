@@ -55,6 +55,7 @@ public:
 	bool sensed;
 	bool start;
 	bool reboted;
+	bool reboted2;
 
 	float power_ball;
 
@@ -70,9 +71,15 @@ public:
 	SDL_Texture* flipper_right_tex;
 	SDL_Texture* tunnel_tex;
 	SDL_Texture* title;
+	SDL_Texture* lights_ball_throw;
+
 	
 	uint start_fx;
 	uint ball_throw_fx;
+	uint bumper_fx;
+	uint lateral_bumper_fx;
+	uint loose_bip_fx;
+	uint loose_dinosaur_fx;
 
 	p2Point<int> ray;
 	bool ray_on;

@@ -30,20 +30,26 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	
-	pin_background = App->textures->Load("pinball/background.png");
+	//textures
+	pin_background = App->textures->Load("pinball/background2.png");
 	ball_tex = App->textures->Load("pinball/ball2.png");
 	bounce_tex = App->textures->Load("pinball/Bounce.png");
 	lateral_bounce_right_tex = App->textures->Load("pinball/lateral_Bounce_right.png");
 	lateral_bounce_left_tex = App->textures->Load("pinball/lateral_Bounce_left.png");
-
 	flipper_left_tex = App->textures->Load("pinball/flipper_left.png");
 	flipper_right_tex = App->textures->Load("pinball/flipper_right.png");
 	tunnel_tex = App->textures->Load("pinball/tunnel.png");
 	title = App->textures->Load("pinball/title.png");
+	lights_ball_throw = App->textures->Load("pinball/lights_ball_throw.png");
+
+	//SFX
 	ball_throw_fx = App->audio->LoadFx("pinball/Sound/ball_trow.wav");
 	start_fx = App->audio->LoadFx("pinball/Sound/start.wav");
+	bumper_fx = App->audio->LoadFx("pinball/Sound/start.wav");
+	lateral_bumper_fx = App->audio->LoadFx("pinball/Sound/lateral_bounce.wav");
 
 	App->audio->PlayFx(start_fx);
+
 	CreateJoints();
 	AddBodies();
 	SetChain();
@@ -65,6 +71,7 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(flipper_right_tex);
 	App->textures->Unload(tunnel_tex);
 	App->textures->Unload(title);
+	App->textures->Unload(lights_ball_throw);
 
 
 	return true;
@@ -73,7 +80,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	
+
 	//ball
 	int x, y;
 	ball->GetPosition(x, y);
@@ -122,6 +129,11 @@ update_status ModuleSceneIntro::Update()
 		circles.getLast()->data->listener = this;
 	}
 
+	App->renderer->Blit(pin_background, 0, 0);
+	App->renderer->Blit(ball_tex, x, y);
+	App->renderer->Blit(tunnel_tex, 90, 35);
+	App->renderer->Blit(title, 9, 364);
+
 	// Prepare for raycast ------------------------------------------------------
 	
 	iPoint mouse;
@@ -160,10 +172,7 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	App->renderer->Blit(pin_background, 0, 0);
-	App->renderer->Blit(ball_tex, x, y);
-	App->renderer->Blit(tunnel_tex, 90, 35);
-	App->renderer->Blit(title, 9, 364);
+	
 
 	if (left_flipper != NULL)
 	{
@@ -222,6 +231,9 @@ update_status ModuleSceneIntro::Update()
 		lateral_bounce_left = lateral_bounce_left->next;
 	}
 
+	App->renderer->Blit(lights_ball_throw, 200, 62);
+
+
 	return UPDATE_CONTINUE;
 }
 
@@ -264,6 +276,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB == item->data)
 		{
 			reboted = true;
+			LOG("HHHHHHH");
 		}
 		item = item->next;
 	}
@@ -274,7 +287,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		if (bodyB == item2->data)
 		{
-			reboted = true;
+			reboted2 = true;
 		}
 		item2 = item2->next;
 	}
@@ -285,16 +298,24 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		if (bodyB == item3->data)
 		{
-			reboted = true;
+			reboted2 = true;
+			LOG("HOLA");
 		}
 		item3 = item3->next;
 	}
 
-	if (reboted)
+	if (reboted==true)
 	{
 		//App->player->score += 100;
-		//App->audio->PlayFx(AUDIO);
 		reboted = false;
+	}
+
+	if (reboted2==true)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(lateral_bumper_fx);
+		LOG("HI");
+		reboted2 = false;
 	}
 
 }
@@ -474,7 +495,7 @@ void ModuleSceneIntro::AddBodies() {
 	5, 11
 	};
 	
-	lateral_bumper_right.add(App->physics->CreateChain(300, 200, lateral_Bounce_right, false, 10, 1.5f));
+	lateral_bumper_right.add(App->physics->CreateChain(209, 160, lateral_Bounce_right, false, 10, 1.1f));
 	
 	item2 = lateral_bumper_right.getFirst();
 
@@ -494,7 +515,7 @@ void ModuleSceneIntro::AddBodies() {
 	20, 11
 	};
 	
-	lateral_bumper_left.add(App->physics->CreateChain(340, 200, lateral_Bounce_left, false, 10, 1.5f));
+	lateral_bumper_left.add(App->physics->CreateChain(12, 197, lateral_Bounce_left, false, 10, 1.1f));
 		
 	item3 = lateral_bumper_left.getFirst();
 
@@ -517,19 +538,15 @@ void ModuleSceneIntro::CreateJoints() {
 	left_flipper = App->physics->CreateRectangle(100, 338, 35, 8, true, 0.0f);
 	right_flipper = App->physics->CreateRectangle(140, 338, 35, 8, true, 0.0f);
 	
-	
 	left_flipper_ball = App->physics->CreateCircle(87, 340, 2, false, 0.25f);
 	right_flipper_ball = App->physics->CreateCircle(153, 340, 2, false, 0.25f);
 	
-
 	left_flipper_definition.Initialize(left_flipper->body, left_flipper_ball->body, left_flipper_ball->body->GetWorldCenter());
 	right_flipper_definition.Initialize(right_flipper_ball->body, right_flipper->body, right_flipper_ball->body->GetWorldCenter());
 	
-
 	left_flipper_definition.enableLimit = true;
 	right_flipper_definition.enableLimit = true;
 	
-
 	left_flipper_definition.lowerAngle = -40 * DEGTORAD;
 	left_flipper_definition.upperAngle = 40 * DEGTORAD;
 	right_flipper_definition.lowerAngle = -40 * DEGTORAD;
