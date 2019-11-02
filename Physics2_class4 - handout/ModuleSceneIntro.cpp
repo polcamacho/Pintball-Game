@@ -82,20 +82,22 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	
-
-	//ball
-	int x, y;
-	ball->GetPosition(x, y);
-
+		
 	//blits
 	App->renderer->Blit(pin_background, 0, 0);
-	App->renderer->Blit(ball_tex, x, y);
+	
+	if (ball != nullptr)
+	{//ball
+		int x, y;
+		ball->GetPosition(x, y);
+		App->renderer->Blit(ball_tex, x, y);
+	}
+
 	App->renderer->Blit(tunnel_tex, 90, 35);
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		power_ball = 6.25f;
+		power_ball = -21.5f;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
@@ -103,7 +105,7 @@ update_status ModuleSceneIntro::Update()
 
 		if (start == true)
 		{
-			ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
+			ball->body->SetLinearVelocity(b2Vec2(0, power_ball));
 			App->audio->PlayFx(ball_throw_fx);
 			start = false;
 		}
@@ -310,7 +312,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		item3 = item3->next;
 	}
 
-	if (reboted==true)
+	if (reboted)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
@@ -318,7 +320,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		reboted = false;
 	}
 
-	if (reboted2==true)
+	if (reboted2)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(lateral_bumper_fx);
@@ -459,7 +461,9 @@ void ModuleSceneIntro::SetChain(){
 void ModuleSceneIntro::AddBodies() {
 	
 	//BAll
-	ball = App->physics->CreateCircle(241, 340, 5, true, 0.0f);
+	ball = App->physics->CreateCircle(241, 340, 5, true, 0.1f);
+	ball->listener = this;
+	//live++;
 
 	//Sensor Start
 	rect_ground = App->physics->CreateRectangleSensor(241, 363, 10, 5);
@@ -566,3 +570,23 @@ void ModuleSceneIntro::CreateJoints() {
 
 	
 }
+
+/*void ModulePlayer::RestartBall(bool reset)
+{
+	if (++live >= 5 && reset == false)
+		gameover = true;
+	else if (reset == true)
+	{
+		ball->body->SetLinearVelocity(b2Vec2(0, 0));
+		ball->body->SetAngularVelocity(0);
+		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(320), PIXEL_TO_METERS(485)), 0);
+		score = 0;
+		live = 1;
+	}
+	else
+	{
+		ball->body->SetLinearVelocity(b2Vec2(0, 0));
+		ball->body->SetAngularVelocity(0);
+		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(320), PIXEL_TO_METERS(485)), 0);
+	}
+}*/

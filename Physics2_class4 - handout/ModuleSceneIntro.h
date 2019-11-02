@@ -19,7 +19,7 @@ public:
 	void SetChain();
 	void AddBodies();
 	void CreateJoints();
-
+	void RestartBall(bool reset);
 
 public:
 	
