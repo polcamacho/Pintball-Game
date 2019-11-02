@@ -63,8 +63,9 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(bounce_tex);
 	App->textures->Unload(flipper_left_tex);
 	App->textures->Unload(flipper_right_tex);
-	App->textures->Unload(flipper_left_tex);
 	App->textures->Unload(tunnel_tex);
+	App->textures->Unload(title);
+
 
 	return true;
 }
@@ -98,6 +99,16 @@ update_status ModuleSceneIntro::Update()
 
 		power_ball = 0;
 
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+
+		App->scene_intro->flipper_left->body->ApplyAngularImpulse(-2.0f, true);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
+
+		App->scene_intro->flipper_right->body->ApplyAngularImpulse(2.0f, true);
 	}
 
 	if (sensed == true)
@@ -156,7 +167,8 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(pin_background, 0, 0);
 	App->renderer->Blit(ball_tex, x, y);
 	App->renderer->Blit(tunnel_tex, 90, 35);
-	
+	App->renderer->Blit(title, 9, 364);
+
 
 	/*c = flipper_left.getFirst();
 
@@ -170,13 +182,13 @@ update_status ModuleSceneIntro::Update()
 
 	c = flipper_right.getFirst();*/
 
-	while(c != NULL)
+	/*while(c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(flipper_right_tex, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
-	}
+	}*/
 
 	if (flipper_left != NULL)
 	{
@@ -189,7 +201,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		flipper_right->GetPosition(x, y);
-		App->renderer->Blit(flipper_right_tex, x, y, NULL, 1.0f, flipper_right->GetRotation());
+		App->renderer->Blit(flipper_right_tex, x-10, y, NULL, 1.0f, flipper_right->GetRotation());
 	}
 
 	// ray -----------------
@@ -445,11 +457,11 @@ void ModuleSceneIntro::CreateJoints() {
 	flipper_left= (App->physics->CreateRectangle(102, 340, 30, 7, true));
 	flipper_right= (App->physics->CreateRectangle(142, 340, 30, 7, true));
 
-	ball_flipper_left = App->physics->CreateCircle(83, 342, 2, false, 0.5f);
-	ball_flipper_right = App->physics->CreateCircle(162, 342, 2, false, 0.5f);
+	ball_flipper_left = App->physics->CreateCircle(88, 342, 2, false, 0.5f);
+	ball_flipper_right = App->physics->CreateCircle(155, 342, 2, false, 0.5f);
 
-	joint_def_left.Initialize(flipper_left->body, ball_flipper_left->body, ball_flipper_left->body->GetWorldCenter());
-	joint_def_right.Initialize(flipper_right->body, ball_flipper_right->body, ball_flipper_right->body->GetWorldCenter());
+	joint_def_left.Initialize(ball_flipper_left->body, flipper_left->body, ball_flipper_left->body->GetWorldCenter());
+	joint_def_right.Initialize(ball_flipper_right->body, flipper_right->body, ball_flipper_right->body->GetWorldCenter());
 
 	joint_def_left.enableLimit = true;
 	joint_def_right.enableLimit = true;
