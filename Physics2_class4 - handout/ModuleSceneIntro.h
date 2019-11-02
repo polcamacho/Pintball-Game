@@ -39,6 +39,9 @@ public:
 	PhysBody* background_chain4;
 	PhysBody* background_chain5;
 	PhysBody* background_chain6;
+	PhysBody* background_chain7;
+	PhysBody* background_chain8;
+	PhysBody* background_chain9;
 
 	PhysBody* left_flipper;
 	PhysBody* right_flipper;

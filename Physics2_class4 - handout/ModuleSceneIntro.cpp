@@ -455,6 +455,34 @@ void ModuleSceneIntro::SetChain(){
 
 	background_chain6 = App->physics->CreateChain(0, 0, lateral_down_right, false, 16, 0.0f);
 	
+	int laterals_left[8] = {
+	26, 297,
+	26, 318,
+	31, 318,
+	31, 304
+	};
+
+	background_chain7 = App->physics->CreateChain(0, 0, laterals_left, false, 8, 0.0f);
+
+	int laterals_right[8] = {
+	221, 297,
+	221, 316,
+	216, 316,
+	216, 304
+	};
+	
+	background_chain8 = App->physics->CreateChain(0, 0, laterals_right, false, 8, 0.0f);
+
+	int start_wall[12] = {
+	59, 57,
+	59, 66,
+	61, 73,
+	62, 72,
+	60, 66,
+	60, 57
+	};
+
+	background_chain9 = App->physics->CreateChain(0, 0, start_wall, false, 12, 0.0f);
 
 }
 
@@ -547,11 +575,11 @@ void ModuleSceneIntro::CreateJoints() {
 	b2RevoluteJointDef left_flipper_definition;
 	b2RevoluteJointDef right_flipper_definition;
 	
-	left_flipper = App->physics->CreateRectangle(100, 338, 35, 8, true, 0.0f);
-	right_flipper = App->physics->CreateRectangle(140, 338, 35, 8, true, 0.0f);
+	left_flipper = App->physics->CreateRectangle(100, 340, 35, 8, true, 0.0f);
+	right_flipper = App->physics->CreateRectangle(140, 340, 35, 8, true, 0.0f);
 	
-	left_flipper_ball = App->physics->CreateCircle(87, 340, 2, false, 0.25f);
-	right_flipper_ball = App->physics->CreateCircle(153, 340, 2, false, 0.25f);
+	left_flipper_ball = App->physics->CreateCircle(87, 342, 2, false, 0.25f);
+	right_flipper_ball = App->physics->CreateCircle(153, 342, 2, false, 0.25f);
 	
 	left_flipper_definition.Initialize(left_flipper->body, left_flipper_ball->body, left_flipper_ball->body->GetWorldCenter());
 	right_flipper_definition.Initialize(right_flipper_ball->body, right_flipper->body, right_flipper_ball->body->GetWorldCenter());
