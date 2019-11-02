@@ -45,8 +45,10 @@ bool ModuleSceneIntro::Start()
 	//SFX
 	ball_throw_fx = App->audio->LoadFx("pinball/Sound/ball_trow.wav");
 	start_fx = App->audio->LoadFx("pinball/Sound/start.wav");
-	bumper_fx = App->audio->LoadFx("pinball/Sound/start.wav");
+	bumper_fx = App->audio->LoadFx("pinball/Sound/bounce.wav");
 	lateral_bumper_fx = App->audio->LoadFx("pinball/Sound/lateral_bounce.wav");
+	loose_bip_fx=App->audio->LoadFx("pinball/Sound/loose_pip.wav");
+	loose_dinosaur_fx = App->audio->LoadFx("pinball/Sound/dinosaur.wav");
 
 	App->audio->PlayFx(start_fx);
 
@@ -80,10 +82,16 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	
 
 	//ball
 	int x, y;
 	ball->GetPosition(x, y);
+
+	//blits
+	App->renderer->Blit(pin_background, 0, 0);
+	App->renderer->Blit(ball_tex, x, y);
+	App->renderer->Blit(tunnel_tex, 90, 35);
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -114,11 +122,10 @@ update_status ModuleSceneIntro::Update()
 		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.5f, true);
 	}
 
-	
-
 	if (sensed == true)
 	{
 		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
+		
 		sensed = false;
 	}
 
@@ -129,10 +136,6 @@ update_status ModuleSceneIntro::Update()
 		circles.getLast()->data->listener = this;
 	}
 
-	App->renderer->Blit(pin_background, 0, 0);
-	App->renderer->Blit(ball_tex, x, y);
-	App->renderer->Blit(tunnel_tex, 90, 35);
-	App->renderer->Blit(title, 9, 364);
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -231,7 +234,10 @@ update_status ModuleSceneIntro::Update()
 		lateral_bounce_left = lateral_bounce_left->next;
 	}
 
+
+	//blits
 	App->renderer->Blit(lights_ball_throw, 200, 62);
+	App->renderer->Blit(title, 9, 364);
 
 
 	return UPDATE_CONTINUE;
@@ -266,7 +272,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyA->body->GetFixtureList()->IsSensor())
 	{
-	ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
+		ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
 	}
 
 	p2List_item<PhysBody*>* item = bumper.getFirst();
@@ -307,6 +313,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (reboted==true)
 	{
 		//App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
+
 		reboted = false;
 	}
 

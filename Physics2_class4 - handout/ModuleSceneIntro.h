@@ -27,8 +27,6 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 	
-	
-
 	PhysBody* sensor;
 	PhysBody* rect_ground;
 	p2List<PhysBody*> bumper;
@@ -42,8 +40,6 @@ public:
 	PhysBody* background_chain5;
 	PhysBody* background_chain6;
 
-	
-	
 	PhysBody* left_flipper;
 	PhysBody* right_flipper;
 	PhysBody* left_flipper_ball;
@@ -51,12 +47,10 @@ public:
 	
 	PhysBody* ball;
 
-
 	bool sensed;
 	bool start;
 	bool reboted;
 	bool reboted2;
-
 	float power_ball;
 
 	SDL_Texture* circle;
@@ -73,7 +67,6 @@ public:
 	SDL_Texture* title;
 	SDL_Texture* lights_ball_throw;
 
-	
 	uint start_fx;
 	uint ball_throw_fx;
 	uint bumper_fx;
@@ -84,5 +77,6 @@ public:
 	p2Point<int> ray;
 	bool ray_on;
 
+	int score = 0;
 	
 };
