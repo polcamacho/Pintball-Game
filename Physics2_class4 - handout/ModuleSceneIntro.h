@@ -27,8 +27,6 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 	
-	PhysBody* sensor;
-	PhysBody* rect_ground;
 	p2List<PhysBody*> bumper;
 	p2List<PhysBody*> lateral_bumper_right;
 	p2List<PhysBody*> lateral_bumper_left;
@@ -39,15 +37,26 @@ public:
 	PhysBody* background_chain4;
 	PhysBody* background_chain5;
 	PhysBody* background_chain6;
-
 	PhysBody* left_flipper;
 	PhysBody* right_flipper;
 	PhysBody* left_flipper_ball;
 	PhysBody* right_flipper_ball;
-	
 	PhysBody* ball;
+	PhysBody* rect_ground;
+	PhysBody* sensor_death;
+	PhysBody* sensor_start_1;
+	PhysBody* sensor_start_2;
+	PhysBody* sensor_start_3;
+	PhysBody* sensor_start_4;
+	PhysBody* sensor_start_5;
+
 
 	bool sensed;
+	bool sensed_start_1;
+	bool sensed_start_2;
+	bool sensed_start_3;
+	bool sensed_start_4;
+	bool sensed_start_5;
 	bool start;
 	bool reboted;
 	bool reboted2;

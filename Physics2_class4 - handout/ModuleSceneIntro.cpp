@@ -13,6 +13,11 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	circle = box = rick = NULL;
 	ray_on = false;
 	sensed = false;
+	sensed_start_1 = false;
+	sensed_start_2 = false;
+	sensed_start_3 = false;
+	sensed_start_4 = false;
+	sensed_start_5 = false;
 	ball = NULL;
 	ball_tex = nullptr;
 	bounce_tex = nullptr;
@@ -255,7 +260,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			start = true;
 		}
-		if (bodyA == sensor)
+		if (bodyA == sensor_death)
 		{
 			sensed = true;
 		}
@@ -470,22 +475,38 @@ void ModuleSceneIntro::AddBodies() {
 	rect_ground->listener = this;
 
 	//Death Sensor
-	sensor = App->physics->CreateRectangleSensor(123, SCREEN_HEIGHT, SCREEN_WIDTH / 4, 24);
-	sensor->listener = this;
+	sensor_death = App->physics->CreateRectangleSensor(123, SCREEN_HEIGHT, SCREEN_WIDTH / 4, 24);
+	sensor_death->listener = this;
+
+	//Sensors tube start 
+	sensor_start_1 = App->physics->CreateRectangleSensor(240, 273, 12, 5);
+	sensor_start_1->listener = this;
+
+	sensor_start_2 = App->physics->CreateRectangleSensor(240, 217, 12, 5);
+	sensor_start_2->listener = this;
+
+	sensor_start_3 = App->physics->CreateRectangleSensor(240, 158, 12, 5);
+	sensor_start_3->listener = this;
+
+	sensor_start_4 = App->physics->CreateRectangleSensor(150, 270, 12, 5);
+	sensor_start_4->listener = this;
+
+	sensor_start_5 = App->physics->CreateRectangleSensor(130, 270, 12, 5);
+	sensor_start_5->listener = this;
 
 	//bumpers
 	p2List_item<PhysBody*>* item;
 
-	bumper.add(App->physics->CreateCircle(80, 125, 8, false, 1.5f));
-	bumper.add(App->physics->CreateCircle(40, 120, 8, false, 1.5f));
-	bumper.add(App->physics->CreateCircle(200, 130, 8, false, 1.5f));
-	bumper.add(App->physics->CreateCircle(60, 195, 8, false, 1.5f));
-	bumper.add(App->physics->CreateCircle(110, 180, 8, false, 1.5f));
-	bumper.add(App->physics->CreateCircle(65, 280, 8, false, 1.5f));
-	bumper.add(App->physics->CreateCircle(195, 175, 8, false, 1.5f));
-	bumper.add(App->physics->CreateCircle(100, 220, 8, false, 1.5f));
-	bumper.add(App->physics->CreateCircle(150, 200, 8, false, 1.5f));
-	bumper.add(App->physics->CreateCircle(135, 100, 8, false, 1.5f));
+	bumper.add(App->physics->CreateCircle(80, 125, 8, false, 1.2f));
+	bumper.add(App->physics->CreateCircle(40, 120, 8, false, 1.2f));
+	bumper.add(App->physics->CreateCircle(200, 130, 8, false, 1.2f));
+	bumper.add(App->physics->CreateCircle(60, 195, 8, false, 1.2f));
+	bumper.add(App->physics->CreateCircle(110, 180, 8, false, 1.2f));
+	bumper.add(App->physics->CreateCircle(65, 280, 8, false, 1.2f));
+	bumper.add(App->physics->CreateCircle(195, 175, 8, false, 1.2f));
+	bumper.add(App->physics->CreateCircle(100, 220, 8, false, 1.2f));
+	bumper.add(App->physics->CreateCircle(150, 200, 8, false, 1.2f));
+	bumper.add(App->physics->CreateCircle(135, 100, 8, false, 1.2f));
 
 	item = bumper.getFirst();
 
