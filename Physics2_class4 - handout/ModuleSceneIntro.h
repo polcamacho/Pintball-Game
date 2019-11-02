@@ -37,6 +37,13 @@ public:
 	PhysBody* background_chain4;
 	PhysBody* background_chain5;
 	PhysBody* background_chain6;
+<<<<<<< HEAD
+=======
+	PhysBody* background_chain7;
+	PhysBody* background_chain8;
+	PhysBody* background_chain9;
+
+>>>>>>> ad42878e161ebad8587d4869d9e94539491b7ed9
 	PhysBody* left_flipper;
 	PhysBody* right_flipper;
 	PhysBody* left_flipper_ball;
