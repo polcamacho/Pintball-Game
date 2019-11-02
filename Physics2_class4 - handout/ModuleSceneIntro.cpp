@@ -46,6 +46,12 @@ bool ModuleSceneIntro::Start()
 	tunnel_tex = App->textures->Load("pinball/tunnel.png");
 	title = App->textures->Load("pinball/title.png");
 	lights_ball_throw = App->textures->Load("pinball/lights_ball_throw.png");
+	light1_ball_throw_on = App->textures->Load("pinball/light_1_2_3.png");
+	light2_ball_throw_on = App->textures->Load("pinball/light_1_2_3.png");
+	light3_ball_throw_on = App->textures->Load("pinball/light_1_2_3.png");
+	light4_ball_throw_on = App->textures->Load("pinball/light_4.png");
+	light5_ball_throw_on = App->textures->Load("pinball/light_5.png");
+
 
 	//SFX
 	ball_throw_fx = App->audio->LoadFx("pinball/Sound/ball_trow.wav");
@@ -79,7 +85,11 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(tunnel_tex);
 	App->textures->Unload(title);
 	App->textures->Unload(lights_ball_throw);
-
+	App->textures->Unload(light1_ball_throw_on);
+	App->textures->Unload(light2_ball_throw_on);
+	App->textures->Unload(light3_ball_throw_on);
+	App->textures->Unload(light4_ball_throw_on);
+	App->textures->Unload(light5_ball_throw_on);
 
 	return true;
 }
@@ -99,6 +109,9 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	App->renderer->Blit(tunnel_tex, 90, 35);
+	//blits
+	App->renderer->Blit(lights_ball_throw, 200, 62);
+	App->renderer->Blit(title, 9, 364);
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -134,6 +147,37 @@ update_status ModuleSceneIntro::Update()
 		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
 		
 		sensed = false;
+	}
+
+	if (sensed_start_1 == true)
+	{
+		App->renderer->Blit(light1_ball_throw_on, 235, 265);
+		     
+		sensed_start_1 = false;
+	}
+
+	if (sensed_start_2 == true)
+	{
+		App->renderer->Blit(light2_ball_throw_on, 235, 206);
+		sensed_start_2 = false;
+	}
+
+	if (sensed_start_3 == true)
+	{
+		App->renderer->Blit(light3_ball_throw_on, 235, 149);
+		sensed_start_3 = false;
+	}
+
+	if (sensed_start_4 == true)
+	{
+		App->renderer->Blit(light4_ball_throw_on, 225, 100);
+		sensed_start_4 = false;
+	}
+
+	if (sensed_start_5 == true)
+	{
+		App->renderer->Blit(light5_ball_throw_on, 202, 63);
+		sensed_start_5 = false;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -242,9 +286,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 
-	//blits
-	App->renderer->Blit(lights_ball_throw, 200, 62);
-	App->renderer->Blit(title, 9, 364);
+	
 
 
 	return UPDATE_CONTINUE;
@@ -264,6 +306,26 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			sensed = true;
 		}
+		if (bodyA == sensor_start_1)
+		{
+			sensed_start_1 = true;
+		}
+		if (bodyA == sensor_start_2)
+		{
+			sensed_start_2 = true;
+		}
+		if (bodyA == sensor_start_3)
+		{
+			sensed_start_3 = true;
+		}
+		if (bodyA == sensor_start_4)
+		{
+			sensed_start_4 = true;
+		}
+		if (bodyA == sensor_start_5)
+		{
+			sensed_start_5 = true;
+		}
 
 	}
 
@@ -282,6 +344,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
 	}
 
+
 	p2List_item<PhysBody*>* item = bumper.getFirst();
 
 	while (item != nullptr)
@@ -289,7 +352,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB == item->data)
 		{
 			reboted = true;
-			LOG("HHHHHHH");
 		}
 		item = item->next;
 	}
@@ -312,7 +374,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB == item3->data)
 		{
 			reboted2 = true;
-			LOG("HOLA");
 		}
 		item3 = item3->next;
 	}
@@ -320,6 +381,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (reboted)
 	{
 		//App->player->score += 100;
+
 		App->audio->PlayFx(bumper_fx);
 
 		reboted = false;
@@ -329,7 +391,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(lateral_bumper_fx);
-		LOG("HI");
 		reboted2 = false;
 	}
 
@@ -516,10 +577,10 @@ void ModuleSceneIntro::AddBodies() {
 	sensor_start_3 = App->physics->CreateRectangleSensor(240, 158, 12, 5);
 	sensor_start_3->listener = this;
 
-	sensor_start_4 = App->physics->CreateRectangleSensor(150, 270, 12, 5);
+	sensor_start_4 = App->physics->CreateRectangleSensor(230, 113, 12, 5);
 	sensor_start_4->listener = this;
 
-	sensor_start_5 = App->physics->CreateRectangleSensor(130, 270, 12, 5);
+	sensor_start_5 = App->physics->CreateRectangleSensor(208, 78, 12, 5);
 	sensor_start_5->listener = this;
 
 	//bumpers

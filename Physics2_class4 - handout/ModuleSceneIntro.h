@@ -37,13 +37,10 @@ public:
 	PhysBody* background_chain4;
 	PhysBody* background_chain5;
 	PhysBody* background_chain6;
-<<<<<<< HEAD
-=======
 	PhysBody* background_chain7;
 	PhysBody* background_chain8;
 	PhysBody* background_chain9;
 
->>>>>>> ad42878e161ebad8587d4869d9e94539491b7ed9
 	PhysBody* left_flipper;
 	PhysBody* right_flipper;
 	PhysBody* left_flipper_ball;
@@ -82,6 +79,13 @@ public:
 	SDL_Texture* tunnel_tex;
 	SDL_Texture* title;
 	SDL_Texture* lights_ball_throw;
+	SDL_Texture* light1_ball_throw_on;
+	SDL_Texture* light2_ball_throw_on;
+	SDL_Texture* light3_ball_throw_on;
+	SDL_Texture* light4_ball_throw_on;
+	SDL_Texture* light5_ball_throw_on;
+
+	
 
 	uint start_fx;
 	uint ball_throw_fx;
