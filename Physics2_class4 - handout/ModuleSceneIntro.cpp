@@ -96,6 +96,16 @@ update_status ModuleSceneIntro::Update()
 
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	{
+		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.5f, true);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.5f, true);
+	}
+
 	
 
 	if (sensed == true)
@@ -355,21 +365,17 @@ void ModuleSceneIntro::SetChain(){
 };
 
 	background_chain4 = App->physics->CreateChain(0, 0, ball_tube, false, 64);
-
-	int lateral_down_left[20] = {
-	31, 314,
-	43, 319,
-	58, 325,
-	71, 330,
-	84, 335,
-	84, 337,
-	71, 332,
-	58, 327,
-	43, 321,
-	31, 316
+	
+	// Pivot 0, 0
+	int lateral_down_left[10] = {
+		25, 313,
+		79, 332,
+		79, 333,
+		25, 315,
+		25, 314
 	};
 	
-	background_chain5 = App->physics->CreateChain(0, 0, lateral_down_left, false, 20);
+	background_chain5 = App->physics->CreateChain(0, 0, lateral_down_left, false, 10);
 
 	int lateral_down_right[16] = {
 	217, 313,
@@ -445,12 +451,12 @@ void ModuleSceneIntro::CreateJoints() {
 	b2RevoluteJointDef left_flipper_definition;
 	b2RevoluteJointDef right_flipper_definition;
 	
-	left_flipper = App->physics->CreateRectangle(102, 333, 30, 10, true, 0.0f);
-	right_flipper = App->physics->CreateRectangle(140, 340, 30, 10, true, 0.0f);
+	left_flipper = App->physics->CreateRectangle(100, 338, 35, 8, true, 0.0f);
+	right_flipper = App->physics->CreateRectangle(140, 338, 35, 8, true, 0.0f);
 	
 	
-	left_flipper_ball = App->physics->CreateCircle(91, 333, 2, false, 0.25f);
-	right_flipper_ball = App->physics->CreateCircle(155, 340, 2, false, 0.25f);
+	left_flipper_ball = App->physics->CreateCircle(87, 340, 2, false, 0.25f);
+	right_flipper_ball = App->physics->CreateCircle(153, 340, 2, false, 0.25f);
 	
 
 	left_flipper_definition.Initialize(left_flipper->body, left_flipper_ball->body, left_flipper_ball->body->GetWorldCenter());
@@ -461,10 +467,10 @@ void ModuleSceneIntro::CreateJoints() {
 	right_flipper_definition.enableLimit = true;
 	
 
-	left_flipper_definition.lowerAngle = -30 * DEGTORAD;
-	left_flipper_definition.upperAngle = 30 * DEGTORAD;
-	right_flipper_definition.lowerAngle = -30 * DEGTORAD;
-	right_flipper_definition.upperAngle = 30 * DEGTORAD;
+	left_flipper_definition.lowerAngle = -40 * DEGTORAD;
+	left_flipper_definition.upperAngle = 40 * DEGTORAD;
+	right_flipper_definition.lowerAngle = -40 * DEGTORAD;
+	right_flipper_definition.upperAngle = 40 * DEGTORAD;
 
 	left_flipper_ball_joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&left_flipper_definition);
 	left_flipper_ball_joint = (b2RevoluteJoint*)App->physics->world->CreateJoint(&right_flipper_definition);
