@@ -37,9 +37,9 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	
-	lives = 3;
+	lives = 5;
 
-	//textures
+	//TEXTURES
 	pin_background = App->textures->Load("pinball/background2.png");
 	background_lost = App->textures->Load("pinball/background_lost.png");
 	ball_tex = App->textures->Load("pinball/ball2.png");
@@ -57,7 +57,17 @@ bool ModuleSceneIntro::Start()
 	light4_ball_throw_on = App->textures->Load("pinball/light_4.png");
 	light5_ball_throw_on = App->textures->Load("pinball/light_5.png");
 	bounce_hit_tex = App->textures->Load("pinball/Bounce_when_hit.png");
-
+	lateral_bounce_right_tex1 = App->textures->Load("pinball/lateral_Bounce_right1.png");
+	lateral_bounce_right_tex2= App->textures->Load("pinball/lateral_Bounce_right2.png");
+	lateral_bounce_right_tex3 = App->textures->Load("pinball/lateral_Bounce_right3.png");
+	lateral_bounce_right_tex4 = App->textures->Load("pinball/lateral_Bounce_right4.png");
+	lateral_bounce_right_tex5 = App->textures->Load("pinball/lateral_Bounce_right5.png");
+	lateral_bounce_left_tex1 = App->textures->Load("pinball/lateral_Bounce_left1.png");
+	lateral_bounce_left_tex2 = App->textures->Load("pinball/lateral_Bounce_left2.png");
+	lateral_bounce_left_tex3 = App->textures->Load("pinball/lateral_Bounce_left3.png");
+	lateral_bounce_left_tex4 = App->textures->Load("pinball/lateral_Bounce_left4.png");
+	lateral_bounce_left_tex5 = App->textures->Load("pinball/lateral_Bounce_left5.png");
+	
 	//FONTS
 	score=App->fonts->Load("pinball/numbers_font.png", "0123456789", 1);
 
@@ -99,6 +109,18 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(light4_ball_throw_on);
 	App->textures->Unload(light5_ball_throw_on);
 	App->textures->Unload(bounce_hit_tex);
+	App->textures->Unload(lateral_bounce_left_tex);
+	App->textures->Unload(lateral_bounce_left_tex1);
+	App->textures->Unload(lateral_bounce_left_tex2);
+	App->textures->Unload(lateral_bounce_left_tex3);
+	App->textures->Unload(lateral_bounce_left_tex4);
+	App->textures->Unload(lateral_bounce_left_tex5);
+	App->textures->Unload(lateral_bounce_right_tex);
+	App->textures->Unload(lateral_bounce_right_tex1);
+	App->textures->Unload(lateral_bounce_right_tex2);
+	App->textures->Unload(lateral_bounce_right_tex3);
+	App->textures->Unload(lateral_bounce_right_tex4);
+	App->textures->Unload(lateral_bounce_right_tex5);
 	App->fonts->UnLoad(0);
 
 	return true;
@@ -108,11 +130,12 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 		
-	//blits
+	//Blits
 	App->renderer->Blit(pin_background, 0, 0);
 	
+	//BALL
 	if (ball != nullptr)
-	{//ball
+	{
 		int x, y;
 		ball->GetPosition(x, y);
 		App->renderer->Blit(ball_tex, x, y);
@@ -122,6 +145,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(lights_ball_throw, 200, 62);
 	App->renderer->Blit(title, 9, 364);
 	
+
 	
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
@@ -297,7 +321,7 @@ update_status ModuleSceneIntro::Update()
 
 	//BUMPERS
 	{
-		
+
 		if (light_bumper1 == true)
 		{
 
@@ -410,25 +434,45 @@ update_status ModuleSceneIntro::Update()
 
 	//LATERAL BUMPERS
 	{
-	p2List_item<PhysBody*>* lateral_bounce_right = lateral_bumper_right.getFirst();
-
-	while (lateral_bounce_right != nullptr)
+	
+	if(light_lateral_right == true)
 	{
-		int x, y;
-		lateral_bounce_right->data->GetPosition(x, y);
-		App->renderer->Blit(lateral_bounce_right_tex, x, y);
-		lateral_bounce_right = lateral_bounce_right->next;
+		
+		App->renderer->Blit(lateral_bounce_right_tex1, 209, 160);
+		App->renderer->Blit(lateral_bounce_right_tex2, 209, 160);
+		App->renderer->Blit(lateral_bounce_right_tex3, 209, 160);
+		App->renderer->Blit(lateral_bounce_right_tex4, 209, 160);
+		App->renderer->Blit(lateral_bounce_right_tex5, 209, 160);
+		App->renderer->Blit(lateral_bounce_right_tex4, 209, 160);
+		App->renderer->Blit(lateral_bounce_right_tex3, 209, 160);
+		App->renderer->Blit(lateral_bounce_right_tex2, 209, 160);
+		App->renderer->Blit(lateral_bounce_right_tex1, 209, 160);
+		light_lateral_right = false;
+
+	}
+	else {
+		App->renderer->Blit(lateral_bounce_right_tex, 209, 160);
 	}
 
-	p2List_item<PhysBody*>* lateral_bounce_left = lateral_bumper_left.getFirst();
-
-	while (lateral_bounce_left != nullptr)
+	if (light_lateral_left == true)
 	{
-		int x, y;
-		lateral_bounce_left->data->GetPosition(x, y);
-		App->renderer->Blit(lateral_bounce_left_tex, x, y);
-		lateral_bounce_left = lateral_bounce_left->next;
+
+		App->renderer->Blit(lateral_bounce_left_tex1, 12, 197);
+		App->renderer->Blit(lateral_bounce_left_tex2, 12, 197);
+		App->renderer->Blit(lateral_bounce_left_tex3, 12, 197);
+		App->renderer->Blit(lateral_bounce_left_tex4, 12, 197);
+		App->renderer->Blit(lateral_bounce_left_tex5, 12, 197);
+		App->renderer->Blit(lateral_bounce_left_tex4, 12, 197);
+		App->renderer->Blit(lateral_bounce_left_tex3, 12, 197);
+		App->renderer->Blit(lateral_bounce_left_tex2, 12, 197);
+		App->renderer->Blit(lateral_bounce_left_tex1, 12, 197);
+		light_lateral_left = false;
+		
 	}
+	else {
+		App->renderer->Blit(lateral_bounce_left_tex, 12, 197);
+	}
+		
 	}
 
 	if (lives < 1 ) {
@@ -576,34 +620,21 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 	//LATERALS BUMPERS
 	{
-	p2List_item<PhysBody*>* item2 = lateral_bumper_right.getFirst();
 
-	while (item2 != nullptr)
-	{
-		if (bodyB == item2->data)
-		{
-			reboted2_2 = true;
-			
-
+		if (bodyA == lateral_bumper_right) {
+			light_lateral_right = true;
+			reboted2_1 = true;
 		}
-		item2 = item2->next;
-	}
 
-	p2List_item<PhysBody*>* item3 = lateral_bumper_left.getFirst();
-
-	while (item3 != nullptr)
-	{
-		if (bodyB == item3->data)
-		{
+		if (bodyA == lateral_bumper_left) {
+			light_lateral_left = true;
 			reboted2_2 = true;
-			
 		}
-		item3 = item3->next;
 	}
 
 	if (reboted1)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted1 = false;
 		score += 100;
@@ -611,35 +642,35 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 	if (reboted2)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted2 = false;
 		score += 100;
 	}
 	if (reboted3)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted3 = false;
 		score += 100;
 	}
 	if (reboted4)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted4 = false;
 		score += 100;
 	}
 	if (reboted5)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted5 = false;
 		score += 100;
 	}
 	if (reboted6)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted6 = false;
 		score += 100;
@@ -647,41 +678,48 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 	if (reboted7)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted7 = false;
 		score += 100;
 	}
 	if (reboted8)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted8 = false;
 		score += 100;
 	}
 	if (reboted9)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted9 = false;
 		score += 100;
 	}
 	if (reboted10)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(bumper_fx);
 		reboted10 = false;
 		score += 100;
 	}
 
+	if (reboted2_1)
+	{
+		App->audio->PlayFx(lateral_bumper_fx);
+		reboted2_1 = false;
+		score += 150;
+	}
+
 	if (reboted2_2)
 	{
-		//App->player->score += 100;
+		
 		App->audio->PlayFx(lateral_bumper_fx);
 		reboted2_2 = false;
 		score += 150;
 	}
-	}
+	
 }
 
 void ModuleSceneIntro::SetChain(){
@@ -910,7 +948,7 @@ void ModuleSceneIntro::AddBodies() {
 	
 	//Lateral bumpers
 	{
-	p2List_item<PhysBody*>* item2;
+	
 
 	int lateral_Bounce_right[10] = {
 	26, 1,
@@ -920,18 +958,9 @@ void ModuleSceneIntro::AddBodies() {
 	5, 11
 	};
 	
-	lateral_bumper_right.add(App->physics->CreateChain(209, 160, lateral_Bounce_right, false, 10, 1.1f));
+	lateral_bumper_right = App->physics->CreateChain(209, 160, lateral_Bounce_right, false, 10, 1.1f);
+	lateral_bumper_right->listener = this;
 	
-	item2 = lateral_bumper_right.getFirst();
-
-	while (item2 != nullptr)
-	{
-		item2->data->listener = this;
-		item2 = item2->next;
-	}
-	
-	p2List_item<PhysBody*>* item3;
-
 	int lateral_Bounce_left[10] = {
 	0, 1,
 	0, 60,
@@ -940,15 +969,9 @@ void ModuleSceneIntro::AddBodies() {
 	20, 11
 	};
 	
-	lateral_bumper_left.add(App->physics->CreateChain(12, 197, lateral_Bounce_left, false, 10, 1.1f));
-		
-	item3 = lateral_bumper_left.getFirst();
-
-	while (item3 != nullptr)
-	{
-		item3->data->listener = this;
-		item3 = item3->next;
-	}
+	lateral_bumper_left = App->physics->CreateChain(12, 197, lateral_Bounce_left, false, 10, 1.1f);
+	lateral_bumper_left->listener = this;
+	
 	}
 
 }
@@ -994,7 +1017,7 @@ void ModuleSceneIntro::RestartBall(bool reset)
 			highscore = score;
 		}
 		score = 0;
-		lives = 3;
+		lives = 5;
 		previous_score = 0;
 	}
 	else
