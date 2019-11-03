@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "p2Animation.h"
 
 class PhysBody;
 
@@ -26,7 +27,6 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
-	
 	
 	PhysBody* lateral_bumper_right;
 	PhysBody* lateral_bumper_left;
@@ -122,17 +122,10 @@ public:
 	SDL_Texture* light4_ball_throw_on;
 	SDL_Texture* light5_ball_throw_on;
 	SDL_Texture* lateral_bounce_left_tex;
-	SDL_Texture* lateral_bounce_left_tex1;
-	SDL_Texture* lateral_bounce_left_tex2;
-	SDL_Texture* lateral_bounce_left_tex3;
-	SDL_Texture* lateral_bounce_left_tex4;
-	SDL_Texture* lateral_bounce_left_tex5;
+	SDL_Texture* lateral_bounce_left_tex_light;
 	SDL_Texture* lateral_bounce_right_tex;
-	SDL_Texture* lateral_bounce_right_tex1;
-	SDL_Texture* lateral_bounce_right_tex2;
-	SDL_Texture* lateral_bounce_right_tex3;
-	SDL_Texture* lateral_bounce_right_tex4;
-	SDL_Texture* lateral_bounce_right_tex5;
+	SDL_Texture* lateral_bounce_right_tex_light;
+	
 
 
 	uint start_fx;

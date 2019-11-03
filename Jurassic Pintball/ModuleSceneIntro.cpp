@@ -57,16 +57,9 @@ bool ModuleSceneIntro::Start()
 	light4_ball_throw_on = App->textures->Load("pinball/light_4.png");
 	light5_ball_throw_on = App->textures->Load("pinball/light_5.png");
 	bounce_hit_tex = App->textures->Load("pinball/Bounce_when_hit.png");
-	lateral_bounce_right_tex1 = App->textures->Load("pinball/lateral_Bounce_right1.png");
-	lateral_bounce_right_tex2= App->textures->Load("pinball/lateral_Bounce_right2.png");
-	lateral_bounce_right_tex3 = App->textures->Load("pinball/lateral_Bounce_right3.png");
-	lateral_bounce_right_tex4 = App->textures->Load("pinball/lateral_Bounce_right4.png");
-	lateral_bounce_right_tex5 = App->textures->Load("pinball/lateral_Bounce_right5.png");
-	lateral_bounce_left_tex1 = App->textures->Load("pinball/lateral_Bounce_left1.png");
-	lateral_bounce_left_tex2 = App->textures->Load("pinball/lateral_Bounce_left2.png");
-	lateral_bounce_left_tex3 = App->textures->Load("pinball/lateral_Bounce_left3.png");
-	lateral_bounce_left_tex4 = App->textures->Load("pinball/lateral_Bounce_left4.png");
-	lateral_bounce_left_tex5 = App->textures->Load("pinball/lateral_Bounce_left5.png");
+	lateral_bounce_right_tex_light = App->textures->Load("pinball/lateral_Bounce_right_light.png");
+	lateral_bounce_left_tex_light = App->textures->Load("pinball/lateral_Bounce_left_light.png");
+	
 	
 	//FONTS
 	score=App->fonts->Load("pinball/numbers_font.png", "0123456789", 1);
@@ -110,17 +103,11 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(light5_ball_throw_on);
 	App->textures->Unload(bounce_hit_tex);
 	App->textures->Unload(lateral_bounce_left_tex);
-	App->textures->Unload(lateral_bounce_left_tex1);
-	App->textures->Unload(lateral_bounce_left_tex2);
-	App->textures->Unload(lateral_bounce_left_tex3);
-	App->textures->Unload(lateral_bounce_left_tex4);
-	App->textures->Unload(lateral_bounce_left_tex5);
+	App->textures->Unload(lateral_bounce_left_tex_light);
+	
 	App->textures->Unload(lateral_bounce_right_tex);
-	App->textures->Unload(lateral_bounce_right_tex1);
-	App->textures->Unload(lateral_bounce_right_tex2);
-	App->textures->Unload(lateral_bounce_right_tex3);
-	App->textures->Unload(lateral_bounce_right_tex4);
-	App->textures->Unload(lateral_bounce_right_tex5);
+	App->textures->Unload(lateral_bounce_right_tex_light);
+	
 	App->fonts->UnLoad(0);
 
 	return true;
@@ -148,9 +135,11 @@ update_status ModuleSceneIntro::Update()
 
 	
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
 		power_ball = 6.25f;
+
+		power_ball += 2;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
@@ -438,15 +427,8 @@ update_status ModuleSceneIntro::Update()
 	if(light_lateral_right == true)
 	{
 		
-		App->renderer->Blit(lateral_bounce_right_tex1, 209, 160);
-		App->renderer->Blit(lateral_bounce_right_tex2, 209, 160);
-		App->renderer->Blit(lateral_bounce_right_tex3, 209, 160);
-		App->renderer->Blit(lateral_bounce_right_tex4, 209, 160);
-		App->renderer->Blit(lateral_bounce_right_tex5, 209, 160);
-		App->renderer->Blit(lateral_bounce_right_tex4, 209, 160);
-		App->renderer->Blit(lateral_bounce_right_tex3, 209, 160);
-		App->renderer->Blit(lateral_bounce_right_tex2, 209, 160);
-		App->renderer->Blit(lateral_bounce_right_tex1, 209, 160);
+		App->renderer->Blit(lateral_bounce_right_tex_light, 209, 160);
+		
 		light_lateral_right = false;
 
 	}
@@ -457,15 +439,8 @@ update_status ModuleSceneIntro::Update()
 	if (light_lateral_left == true)
 	{
 
-		App->renderer->Blit(lateral_bounce_left_tex1, 12, 197);
-		App->renderer->Blit(lateral_bounce_left_tex2, 12, 197);
-		App->renderer->Blit(lateral_bounce_left_tex3, 12, 197);
-		App->renderer->Blit(lateral_bounce_left_tex4, 12, 197);
-		App->renderer->Blit(lateral_bounce_left_tex5, 12, 197);
-		App->renderer->Blit(lateral_bounce_left_tex4, 12, 197);
-		App->renderer->Blit(lateral_bounce_left_tex3, 12, 197);
-		App->renderer->Blit(lateral_bounce_left_tex2, 12, 197);
-		App->renderer->Blit(lateral_bounce_left_tex1, 12, 197);
+		App->renderer->Blit(lateral_bounce_left_tex_light, 12, 197);
+		
 		light_lateral_left = false;
 		
 	}
@@ -527,15 +502,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.5f, true);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.5f, true);
-	}
+	
 
 	if (bodyA->body->GetFixtureList()->IsSensor())
 	{
