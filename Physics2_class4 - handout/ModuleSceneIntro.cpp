@@ -23,7 +23,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ball = NULL;
 	ball_tex = nullptr;
 	bounce_tex = nullptr;
-	
+	lives = 0;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -37,8 +37,11 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	
+	lives = 3;
+
 	//textures
 	pin_background = App->textures->Load("pinball/background2.png");
+	background_lost = App->textures->Load("pinball/background_lost.png");
 	ball_tex = App->textures->Load("pinball/ball2.png");
 	bounce_tex = App->textures->Load("pinball/Bounce.png");
 	lateral_bounce_right_tex = App->textures->Load("pinball/lateral_Bounce_right.png");
@@ -157,6 +160,16 @@ update_status ModuleSceneIntro::Update()
 		circles.getLast()->data->listener = this;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		
+		gameover = false;
+		RestartBall(true);
+		
+	}
+
+	
+
 	//SENSORS
 	{
 		if (sensed == true)
@@ -165,6 +178,7 @@ update_status ModuleSceneIntro::Update()
 			App->audio->PlayFx(loose_bip_fx);
 			App->audio->PlayFx(loose_dinosaur_fx);
 			sensed = false;
+			lives -= 1;
 		}
 
 		if (sensed_start_1 == true)
@@ -410,6 +424,19 @@ update_status ModuleSceneIntro::Update()
 		lateral_bounce_left = lateral_bounce_left->next;
 	}
 	}
+
+	if (lives < 1 ) {
+		gameover = true;
+	}
+
+	if (gameover == true)
+	{
+
+		App->renderer->Blit(background_lost, 0, 0);
+		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-50), PIXEL_TO_METERS(0)), 0);
+	}
+
+	LOG("%i", lives);
 
 	return UPDATE_CONTINUE;
 }
@@ -933,22 +960,17 @@ void ModuleSceneIntro::CreateJoints() {
 	
 }
 
-/*void ModulePlayer::RestartBall(bool reset)
+void ModuleSceneIntro::RestartBall(bool reset)
 {
-	if (++live >= 5 && reset == false)
-		gameover = true;
-	else if (reset == true)
+	
+	if (reset == true)
 	{
-		ball->body->SetLinearVelocity(b2Vec2(0, 0));
-		ball->body->SetAngularVelocity(0);
-		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(320), PIXEL_TO_METERS(485)), 0);
+		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(241), PIXEL_TO_METERS(340)), 0);
 		score = 0;
-		live = 1;
+		lives = 3;
 	}
 	else
 	{
-		ball->body->SetLinearVelocity(b2Vec2(0, 0));
-		ball->body->SetAngularVelocity(0);
-		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(320), PIXEL_TO_METERS(485)), 0);
+		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(241), PIXEL_TO_METERS(340)), 0);
 	}
-}*/
+}

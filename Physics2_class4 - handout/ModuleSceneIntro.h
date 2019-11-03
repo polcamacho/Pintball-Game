@@ -19,7 +19,7 @@ public:
 	void SetChain();
 	void AddBodies();
 	void CreateJoints();
-	void RestartBall(bool reset);
+	void RestartBall(bool reset = false);
 
 public:
 	
@@ -64,8 +64,7 @@ public:
 	PhysBody* bumper8;
 	PhysBody* bumper9;
 	PhysBody* bumper10;
-
-
+	
 	bool sensed;
 	bool sensed_start_1;
 	bool sensed_start_2;
@@ -73,8 +72,8 @@ public:
 	bool sensed_start_4;
 	bool sensed_start_5;
 	bool start;
-	
 	bool reboted2_2;
+	
 	float power_ball;
 	
 	bool light_bumper1 = false;
@@ -103,6 +102,7 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	SDL_Texture* pin_background;
+	SDL_Texture* background_lost;
 	SDL_Texture* ball_tex;
 	SDL_Texture* bounce_tex;
 	SDL_Texture* bounce_hit_tex;
@@ -119,8 +119,6 @@ public:
 	SDL_Texture* light4_ball_throw_on;
 	SDL_Texture* light5_ball_throw_on;
 
-	
-
 	uint start_fx;
 	uint ball_throw_fx;
 	uint bumper_fx;
@@ -132,5 +130,7 @@ public:
 	bool ray_on;
 
 	int score = 0;
-	
+	uint lives;
+	bool gameover;
+
 };
