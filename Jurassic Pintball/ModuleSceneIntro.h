@@ -28,8 +28,8 @@ public:
 	p2List<PhysBody*> ricks;
 	
 	
-	p2List<PhysBody*> lateral_bumper_right;
-	p2List<PhysBody*> lateral_bumper_left;
+	PhysBody* lateral_bumper_right;
+	PhysBody* lateral_bumper_left;
 
 	PhysBody* background_chain;
 	PhysBody* background_chain2;
@@ -72,8 +72,7 @@ public:
 	bool sensed_start_4;
 	bool sensed_start_5;
 	bool start;
-	bool reboted2_2;
-	
+		
 	float power_ball;
 	
 	bool light_bumper1 = false;
@@ -98,6 +97,12 @@ public:
 	bool reboted9 = false;
 	bool reboted10 = false;
 
+	bool reboted2_1 = false;
+	bool reboted2_2 = false;
+
+	bool light_lateral_left = false;
+	bool light_lateral_right = false;
+
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
@@ -106,8 +111,6 @@ public:
 	SDL_Texture* ball_tex;
 	SDL_Texture* bounce_tex;
 	SDL_Texture* bounce_hit_tex;
-	SDL_Texture* lateral_bounce_left_tex;
-	SDL_Texture* lateral_bounce_right_tex;
 	SDL_Texture* flipper_left_tex;
 	SDL_Texture* flipper_right_tex;
 	SDL_Texture* tunnel_tex;
@@ -118,6 +121,19 @@ public:
 	SDL_Texture* light3_ball_throw_on;
 	SDL_Texture* light4_ball_throw_on;
 	SDL_Texture* light5_ball_throw_on;
+	SDL_Texture* lateral_bounce_left_tex;
+	SDL_Texture* lateral_bounce_left_tex1;
+	SDL_Texture* lateral_bounce_left_tex2;
+	SDL_Texture* lateral_bounce_left_tex3;
+	SDL_Texture* lateral_bounce_left_tex4;
+	SDL_Texture* lateral_bounce_left_tex5;
+	SDL_Texture* lateral_bounce_right_tex;
+	SDL_Texture* lateral_bounce_right_tex1;
+	SDL_Texture* lateral_bounce_right_tex2;
+	SDL_Texture* lateral_bounce_right_tex3;
+	SDL_Texture* lateral_bounce_right_tex4;
+	SDL_Texture* lateral_bounce_right_tex5;
+
 
 	uint start_fx;
 	uint ball_throw_fx;
