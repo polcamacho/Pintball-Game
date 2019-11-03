@@ -54,8 +54,7 @@ bool ModuleSceneIntro::Start()
 	light4_ball_throw_on = App->textures->Load("pinball/light_4.png");
 	light5_ball_throw_on = App->textures->Load("pinball/light_5.png");
 	bounce_hit_tex = App->textures->Load("pinball/Bounce_when_hit.png");
-	App->fonts->Load("pinball/numbers_font.png", "0123456789", 1);
-
+	score=App->fonts->Load("pinball/numbers_font.png", "0123456789", 1);
 
 	//SFX
 	ball_throw_fx = App->audio->LoadFx("pinball/Sound/ball_trow.wav");
@@ -105,6 +104,9 @@ update_status ModuleSceneIntro::Update()
 		
 	//blits
 	App->renderer->Blit(pin_background, 0, 0);
+
+
+	App->fonts->BlitText(100, 100, font_score, high_score);
 	App->fonts->BlitText(377, 174, 0, "0");
 	App->fonts->BlitText(360, 210, 0, "5");
 
@@ -152,7 +154,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 5, true, 0.0f));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 5, true, 0.0f, 1.5f));
 
 		circles.getLast()->data->listener = this;
 	}
@@ -165,7 +167,13 @@ update_status ModuleSceneIntro::Update()
 			App->audio->PlayFx(loose_bip_fx);
 			App->audio->PlayFx(loose_dinosaur_fx);
 			sensed = false;
+			prev_score = score;
+			score = 0;
+			//if (lives == 0) {
+			//}
 		}
+		App->fonts->BlitText(100, 100, 0, "100");
+
 
 		if (sensed_start_1 == true)
 		{
@@ -407,6 +415,7 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		lateral_bounce_left->data->GetPosition(x, y);
 		App->renderer->Blit(lateral_bounce_left_tex, x, y);
+		score += 150;
 		lateral_bounce_left = lateral_bounce_left->next;
 	}
 	}
@@ -472,6 +481,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			
 		reboted1 = true;
 		light_bumper1 = true;
+		score += 100;
 	}
 
 	if (bodyA == bumper2)
@@ -479,6 +489,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		reboted2 = true;
 		light_bumper2 = true;
+		score += 100;
+
 	}
 
 	if (bodyA == bumper3)
@@ -486,48 +498,64 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		light_bumper3 = true;
 		reboted3 = true;
+		score += 100;
+
 	}
 
 	if (bodyA == bumper4)
 	{
 		light_bumper4 = true;
 		reboted4 = true;
+		score += 100;
+
 	}
 
 	if (bodyA == bumper5)
 	{
 		light_bumper5 = true;
 		reboted5 = true;
+		score += 100;
+
 	}
 
 	if (bodyA == bumper6)
 	{
 		light_bumper6 = true;
 		reboted6 = true;
+		score += 100;
+
 	}
 
 	if (bodyA == bumper7)
 	{
 		light_bumper7 = true;
 		reboted7 = true;
+		score += 100;
+
 	}
 
 	if (bodyA == bumper8)
 	{
 		light_bumper8 = true;
 		reboted8 = true;
+		score += 100;
+
 	}
 
 	if (bodyA == bumper9)
 	{
 		light_bumper9 = true;
 		reboted9 = true;
+		score += 100;
+
 	}
 
 	if (bodyA == bumper10)
 	{
 		light_bumper10 = true;
 		reboted10 = true;
+		score += 100;
+
 	}
 	}
 	//LATERALS BUMPERS
@@ -539,6 +567,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB == item2->data)
 		{
 			reboted2_2 = true;
+			score += 150;
+
 		}
 		item2 = item2->next;
 	}
@@ -550,6 +580,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB == item3->data)
 		{
 			reboted2_2 = true;
+
 		}
 		item3 = item3->next;
 	}
@@ -794,7 +825,7 @@ void ModuleSceneIntro::SetChain(){
 void ModuleSceneIntro::AddBodies() {
 	
 	//BAll
-	ball = App->physics->CreateCircle(241, 340, 5, true, 0.1f);
+	ball = App->physics->CreateCircle(241, 340, 5, true, 0.1f, 1.5f);
 	ball->listener = this;
 	//live++;
 
@@ -826,34 +857,34 @@ void ModuleSceneIntro::AddBodies() {
 
 	//Bumpers
 	{
-	bumper1 = App->physics->CreateCircle(80, 125, 8, false, 1.2f);
+	bumper1 = App->physics->CreateCircle(80, 125, 8, false, 1.0f, 1.0f);
 	bumper1->listener = this;
 
-	bumper2 = App->physics->CreateCircle(40, 120, 8, false, 1.2f);
+	bumper2 = App->physics->CreateCircle(40, 120, 8, false, 1.0f, 1.0f);
 	bumper2->listener = this;
 
-	bumper3 = App->physics->CreateCircle(200, 130, 8, false, 1.2f);
+	bumper3 = App->physics->CreateCircle(200, 130, 8, false, 1.0f, 1.0f);
 	bumper3->listener = this;
 
-	bumper4 = App->physics->CreateCircle(60, 195, 8, false, 1.2f);
+	bumper4 = App->physics->CreateCircle(60, 195, 8, false, 1.0f, 1.0f);
 	bumper4->listener = this;
 
-	bumper5 = App->physics->CreateCircle(110, 180, 8, false, 1.2f);
+	bumper5 = App->physics->CreateCircle(110, 180, 8, false, 1.0f, 1.0f);
 	bumper5->listener = this;
 
-	bumper6 = App->physics->CreateCircle(65, 280, 8, false, 1.2f);
+	bumper6 = App->physics->CreateCircle(65, 280, 8, false, 1.0f, 1.0f);
 	bumper6->listener = this;
 
-	bumper7 = App->physics->CreateCircle(195, 175, 8, false, 1.2f);
+	bumper7 = App->physics->CreateCircle(195, 175, 8, false, 1.0f, 1.0f);
 	bumper7->listener = this;
 
-	bumper8 = App->physics->CreateCircle(100, 220, 8, false, 1.2f);
+	bumper8 = App->physics->CreateCircle(100, 220, 8, false, 1.0f, 1.0f);
 	bumper8->listener = this;
 
-	bumper9 = App->physics->CreateCircle(150, 200, 8, false, 1.2f);
+	bumper9 = App->physics->CreateCircle(150, 200, 8, false, 1.0f, 1.0f);
 	bumper9->listener = this;
 
-	bumper10 = App->physics->CreateCircle(135, 100, 8, false, 1.2f);
+	bumper10 = App->physics->CreateCircle(135, 100, 8, false, 1.0f, 1.0f);
 	bumper10->listener = this;
 	}
 	
@@ -909,11 +940,11 @@ void ModuleSceneIntro::CreateJoints() {
 	b2RevoluteJointDef left_flipper_definition;
 	b2RevoluteJointDef right_flipper_definition;
 	
-	left_flipper = App->physics->CreateRectangle(100, 340, 35, 8, true, 0.0f);
-	right_flipper = App->physics->CreateRectangle(140, 340, 35, 8, true, 0.0f);
+	left_flipper = App->physics->CreateRectangle(100, 340, 35, 8, true, 0.75f);
+	right_flipper = App->physics->CreateRectangle(140, 340, 35, 8, true, 0.75f);
 	
-	left_flipper_ball = App->physics->CreateCircle(87, 342, 2, false, 0.25f);
-	right_flipper_ball = App->physics->CreateCircle(153, 342, 2, false, 0.25f);
+	left_flipper_ball = App->physics->CreateCircle(87, 342, 2, false, 0.25f, 1.0f);
+	right_flipper_ball = App->physics->CreateCircle(153, 342, 2, false, 0.25f, 1.0f);
 	
 	left_flipper_definition.Initialize(left_flipper->body, left_flipper_ball->body, left_flipper_ball->body->GetWorldCenter());
 	right_flipper_definition.Initialize(right_flipper_ball->body, right_flipper->body, right_flipper_ball->body->GetWorldCenter());

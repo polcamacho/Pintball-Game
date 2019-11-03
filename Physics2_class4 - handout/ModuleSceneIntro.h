@@ -132,5 +132,9 @@ public:
 	bool ray_on;
 
 	int score = 0;
-	
+	int font_score = -1;
+	int high_score = 0;
+	int prev_score = 0;
+	char high_score[20];
+
 };

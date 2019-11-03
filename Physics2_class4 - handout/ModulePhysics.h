@@ -43,7 +43,7 @@ public:
 	bool CleanUp();
 
 
-	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic, float velocity);
+	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic, float velocity, float density);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bool dynamic, float velocity);
 
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
