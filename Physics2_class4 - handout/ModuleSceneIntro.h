@@ -129,15 +129,19 @@ public:
 	p2Point<int> ray;
 	bool ray_on;
 
+	
 	int score = 0;
-<<<<<<< HEAD
-	int font_score = -1;
-	int high_score = 0;
-	int prev_score = 0;
-	char high_score[20];
-=======
-	uint lives;
+	int previous_score = 0;
+	int highscore = 0;
+
+	char score_char[10];
+	char previous_char[10];
+	char highscore_char[10];
+	
+	
+	int lives;
+	char lives_char[10];
 	bool gameover;
->>>>>>> 6ef5590fe84b6fb6b3172d2c7f36fda7b4194e70
+
 
 };

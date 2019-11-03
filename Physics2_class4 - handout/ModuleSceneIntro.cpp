@@ -57,6 +57,8 @@ bool ModuleSceneIntro::Start()
 	light4_ball_throw_on = App->textures->Load("pinball/light_4.png");
 	light5_ball_throw_on = App->textures->Load("pinball/light_5.png");
 	bounce_hit_tex = App->textures->Load("pinball/Bounce_when_hit.png");
+
+	//FONTS
 	score=App->fonts->Load("pinball/numbers_font.png", "0123456789", 1);
 
 	//SFX
@@ -74,7 +76,7 @@ bool ModuleSceneIntro::Start()
 	SetChain();
 	
 	power_ball = 0;
-
+	
 	return ret;
 }
 
@@ -97,6 +99,7 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(light4_ball_throw_on);
 	App->textures->Unload(light5_ball_throw_on);
 	App->textures->Unload(bounce_hit_tex);
+	App->fonts->UnLoad(0);
 
 	return true;
 }
@@ -107,12 +110,7 @@ update_status ModuleSceneIntro::Update()
 		
 	//blits
 	App->renderer->Blit(pin_background, 0, 0);
-
-
-	App->fonts->BlitText(100, 100, font_score, high_score);
-	App->fonts->BlitText(377, 174, 0, "0");
-	App->fonts->BlitText(360, 210, 0, "5");
-
+	
 	if (ball != nullptr)
 	{//ball
 		int x, y;
@@ -180,18 +178,11 @@ update_status ModuleSceneIntro::Update()
 			App->audio->PlayFx(loose_bip_fx);
 			App->audio->PlayFx(loose_dinosaur_fx);
 			sensed = false;
-<<<<<<< HEAD
-			prev_score = score;
-			score = 0;
-			//if (lives == 0) {
-			//}
-=======
+			
 			lives -= 1;
->>>>>>> 6ef5590fe84b6fb6b3172d2c7f36fda7b4194e70
+
 		}
-		App->fonts->BlitText(100, 100, 0, "100");
-
-
+		
 		if (sensed_start_1 == true)
 		{
 			App->renderer->Blit(light1_ball_throw_on, 235, 265);
@@ -288,6 +279,20 @@ update_status ModuleSceneIntro::Update()
 		if(normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
+
+	//SCORE AND LIVES
+
+	sprintf_s(lives_char, 10, "%d", lives);
+	App->fonts->BlitText(360, 213, 0, lives_char);
+
+	sprintf_s(score_char, 10, "%d", score);
+	App->fonts->BlitText(275, 174, 0, score_char);
+
+	/*sprintf_s(highscore_char, 10, "%d", highscore);
+	App->fonts->BlitText(270, 200, 0, highscore_char);
+
+	sprintf_s(previous_char, 10, "%d", previous_score);
+	App->fonts->BlitText(270, 225, 0, previous_char);*/
 
 	//BUMPERS
 	{
@@ -432,7 +437,6 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		lateral_bounce_left->data->GetPosition(x, y);
 		App->renderer->Blit(lateral_bounce_left_tex, x, y);
-		score += 150;
 		lateral_bounce_left = lateral_bounce_left->next;
 	}
 	}
@@ -511,7 +515,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			
 		reboted1 = true;
 		light_bumper1 = true;
-		score += 100;
+		
 	}
 
 	if (bodyA == bumper2)
@@ -519,7 +523,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		reboted2 = true;
 		light_bumper2 = true;
-		score += 100;
+		
 
 	}
 
@@ -528,7 +532,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		light_bumper3 = true;
 		reboted3 = true;
-		score += 100;
+		
 
 	}
 
@@ -536,7 +540,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		light_bumper4 = true;
 		reboted4 = true;
-		score += 100;
+		
 
 	}
 
@@ -544,7 +548,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		light_bumper5 = true;
 		reboted5 = true;
-		score += 100;
+		
 
 	}
 
@@ -552,7 +556,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		light_bumper6 = true;
 		reboted6 = true;
-		score += 100;
+		
 
 	}
 
@@ -560,7 +564,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		light_bumper7 = true;
 		reboted7 = true;
-		score += 100;
+		
 
 	}
 
@@ -568,7 +572,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		light_bumper8 = true;
 		reboted8 = true;
-		score += 100;
+		
 
 	}
 
@@ -576,7 +580,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		light_bumper9 = true;
 		reboted9 = true;
-		score += 100;
+		
 
 	}
 
@@ -584,7 +588,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		light_bumper10 = true;
 		reboted10 = true;
-		score += 100;
+		
 
 	}
 	}
@@ -597,7 +601,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB == item2->data)
 		{
 			reboted2_2 = true;
-			score += 150;
+			
 
 		}
 		item2 = item2->next;
@@ -610,7 +614,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB == item3->data)
 		{
 			reboted2_2 = true;
-
+			
 		}
 		item3 = item3->next;
 	}
@@ -620,7 +624,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted1 = false;
-		
+		score += 100;
 		
 	}
 	if (reboted2)
@@ -628,35 +632,35 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted2 = false;
-		
+		score += 100;
 	}
 	if (reboted3)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted3 = false;
-		
+		score += 100;
 	}
 	if (reboted4)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted4 = false;
-		
+		score += 100;
 	}
 	if (reboted5)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted5 = false;
-		
+		score += 100;
 	}
 	if (reboted6)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted6 = false;
-		
+		score += 100;
 
 	}
 	if (reboted7)
@@ -664,27 +668,28 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted7 = false;
-		
+		score += 100;
 	}
 	if (reboted8)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted8 = false;
-		
+		score += 100;
 	}
 	if (reboted9)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted9 = false;
-		
+		score += 100;
 	}
 	if (reboted10)
 	{
 		//App->player->score += 100;
 		App->audio->PlayFx(bumper_fx);
 		reboted10 = false;
+		score += 100;
 	}
 
 	if (reboted2_2)
@@ -692,6 +697,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		//App->player->score += 100;
 		App->audio->PlayFx(lateral_bumper_fx);
 		reboted2_2 = false;
+		score += 150;
 	}
 	}
 }
@@ -1002,6 +1008,7 @@ void ModuleSceneIntro::RestartBall(bool reset)
 		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(241), PIXEL_TO_METERS(340)), 0);
 		score = 0;
 		lives = 3;
+		//previous_score = score;
 	}
 	else
 	{
