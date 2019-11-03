@@ -27,7 +27,7 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 	
-	p2List<PhysBody*> bumper;
+	
 	p2List<PhysBody*> lateral_bumper_right;
 	p2List<PhysBody*> lateral_bumper_left;
 
@@ -53,6 +53,17 @@ public:
 	PhysBody* sensor_start_3;
 	PhysBody* sensor_start_4;
 	PhysBody* sensor_start_5;
+	
+	PhysBody* bumper1;
+	PhysBody* bumper2;
+	PhysBody* bumper3;
+	PhysBody* bumper4;
+	PhysBody* bumper5;
+	PhysBody* bumper6;
+	PhysBody* bumper7;
+	PhysBody* bumper8;
+	PhysBody* bumper9;
+	PhysBody* bumper10;
 
 
 	bool sensed;
@@ -62,9 +73,31 @@ public:
 	bool sensed_start_4;
 	bool sensed_start_5;
 	bool start;
-	bool reboted;
-	bool reboted2;
+	
+	bool reboted2_2;
 	float power_ball;
+	
+	bool light_bumper1 = false;
+	bool light_bumper2 = false;
+	bool light_bumper3 = false;
+	bool light_bumper4 = false;
+	bool light_bumper5 = false;
+	bool light_bumper6 = false;
+	bool light_bumper7 = false;
+	bool light_bumper8 = false;
+	bool light_bumper9 = false;
+	bool light_bumper10 = false;
+	
+	bool reboted1 = false;
+	bool reboted2 = false;
+	bool reboted3 = false;
+	bool reboted4 = false;
+	bool reboted5 = false;
+	bool reboted6 = false;
+	bool reboted7 = false;
+	bool reboted8 = false;
+	bool reboted9 = false;
+	bool reboted10 = false;
 
 	SDL_Texture* circle;
 	SDL_Texture* box;

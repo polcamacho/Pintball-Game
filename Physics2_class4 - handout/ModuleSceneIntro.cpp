@@ -51,7 +51,7 @@ bool ModuleSceneIntro::Start()
 	light3_ball_throw_on = App->textures->Load("pinball/light_1_2_3.png");
 	light4_ball_throw_on = App->textures->Load("pinball/light_4.png");
 	light5_ball_throw_on = App->textures->Load("pinball/light_5.png");
-	bounce_hit_tex = App->textures->Load("pinball/bounce_when_hit.png");
+	bounce_hit_tex = App->textures->Load("pinball/Bounce_when_hit.png");
 
 	//SFX
 	ball_throw_fx = App->audio->LoadFx("pinball/Sound/ball_trow.wav");
@@ -110,9 +110,10 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	App->renderer->Blit(tunnel_tex, 90, 35);
-	//blits
 	App->renderer->Blit(lights_ball_throw, 200, 62);
 	App->renderer->Blit(title, 9, 364);
+	
+	
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -143,52 +144,54 @@ update_status ModuleSceneIntro::Update()
 		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.5f, true);
 	}
 
-	if (sensed == true)
-	{
-		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
-		App->audio->PlayFx(loose_bip_fx);
-		App->audio->PlayFx(loose_dinosaur_fx);
-		sensed = false;
-	}
-
-	if (sensed_start_1 == true)
-	{
-		App->renderer->Blit(light1_ball_throw_on, 235, 265);
-		     
-		sensed_start_1 = false;
-	}
-
-	if (sensed_start_2 == true)
-	{
-		App->renderer->Blit(light2_ball_throw_on, 235, 206);
-		sensed_start_2 = false;
-	}
-
-	if (sensed_start_3 == true)
-	{
-		App->renderer->Blit(light3_ball_throw_on, 235, 149);
-		sensed_start_3 = false;
-	}
-
-	if (sensed_start_4 == true)
-	{
-		App->renderer->Blit(light4_ball_throw_on, 225, 100);
-		sensed_start_4 = false;
-	}
-
-	if (sensed_start_5 == true)
-	{
-		App->renderer->Blit(light5_ball_throw_on, 202, 63);
-		sensed_start_5 = false;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 5, true, 0.0f));
 
 		circles.getLast()->data->listener = this;
 	}
 
+	//SENSORS
+	{
+		if (sensed == true)
+		{
+			ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
+			App->audio->PlayFx(loose_bip_fx);
+			App->audio->PlayFx(loose_dinosaur_fx);
+			sensed = false;
+		}
+
+		if (sensed_start_1 == true)
+		{
+			App->renderer->Blit(light1_ball_throw_on, 235, 265);
+
+			sensed_start_1 = false;
+		}
+
+		if (sensed_start_2 == true)
+		{
+			App->renderer->Blit(light2_ball_throw_on, 235, 206);
+			sensed_start_2 = false;
+		}
+
+		if (sensed_start_3 == true)
+		{
+			App->renderer->Blit(light3_ball_throw_on, 235, 149);
+			sensed_start_3 = false;
+		}
+
+		if (sensed_start_4 == true)
+		{
+			App->renderer->Blit(light4_ball_throw_on, 225, 100);
+			sensed_start_4 = false;
+		}
+
+		if (sensed_start_5 == true)
+		{
+			App->renderer->Blit(light5_ball_throw_on, 202, 63);
+			sensed_start_5 = false;
+		}
+	}
 
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -228,8 +231,6 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	
-
 	if (left_flipper != NULL)
 	{
 		int x, y;
@@ -257,16 +258,132 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
-	p2List_item<PhysBody*>* bounce = bumper.getFirst();
-
-	while (bounce != nullptr)
+	//BUMPERS
 	{
-		int x, y;
-		bounce->data->GetPosition(x, y);
-		App->renderer->Blit(bounce_tex, x, y);
-		bounce = bounce->next;
+
+		App->renderer->Blit(bounce_tex, 70, 115);
+		App->renderer->Blit(bounce_tex, 30, 110);
+		App->renderer->Blit(bounce_tex, 190, 120);
+		App->renderer->Blit(bounce_tex, 50, 185);
+		App->renderer->Blit(bounce_tex, 100, 170);
+		App->renderer->Blit(bounce_tex, 55, 270);
+		App->renderer->Blit(bounce_tex, 185, 165);
+		App->renderer->Blit(bounce_tex, 90, 210);
+		App->renderer->Blit(bounce_tex, 140, 190);
+		App->renderer->Blit(bounce_tex, 125, 90);
+		
+		if (light_bumper1 == true)
+		{
+
+			App->renderer->Blit(bounce_hit_tex, 70, 115);
+			light_bumper1 = false;
+		}
+				
+
+		else {
+			
+			App->renderer->Blit(bounce_tex, 70, 115);	
+
+		}
+
+		if (light_bumper2 == true)
+		{
+			App->renderer->Blit(bounce_hit_tex, 30, 110);
+			light_bumper2 = false;
+		}
+		else {
+			App->renderer->Blit(bounce_tex, 30, 110);
+			
+		}
+
+		if (light_bumper3 == true)
+		{
+			App->renderer->Blit(bounce_hit_tex, 190, 120);
+			light_bumper3 = false;
+		}
+		else {
+			
+			App->renderer->Blit(bounce_tex, 190, 120);
+			
+		}
+
+		if (light_bumper4 == true)
+		{
+			App->renderer->Blit(bounce_hit_tex, 50, 185);
+			light_bumper4 = false;
+		}
+		else {
+			App->renderer->Blit(bounce_tex, 50, 185);
+		}
+
+		if (light_bumper5 == true)
+		{
+			App->renderer->Blit(bounce_hit_tex, 100, 170);
+			light_bumper5 = false;
+		}
+		else {
+			App->renderer->Blit(bounce_tex, 100, 170);
+		}
+
+		if (light_bumper6 == true)
+		{
+			App->renderer->Blit(bounce_hit_tex, 55, 270);
+			light_bumper6 = false;
+		}
+		else {
+			
+			App->renderer->Blit(bounce_tex, 55, 270);
+			
+		}
+	
+		if (light_bumper7 == true)
+		{
+			App->renderer->Blit(bounce_hit_tex, 185, 165);
+			light_bumper7 = false;
+		}
+		else {
+			
+			App->renderer->Blit(bounce_tex, 185, 165);
+			
+		}
+
+		if (light_bumper8 == true)
+		{
+			App->renderer->Blit(bounce_hit_tex, 90, 210);
+			light_bumper8 = false;
+		}
+		else {
+			
+			App->renderer->Blit(bounce_tex, 90, 210);
+			
+		}
+
+		if (light_bumper9 == true)
+		{
+			App->renderer->Blit(bounce_hit_tex, 140, 190);
+			light_bumper9 = false;
+		}
+		else {
+			
+			App->renderer->Blit(bounce_tex, 140, 190);
+			
+		}
+
+		if (light_bumper10 == true)
+		{
+			App->renderer->Blit(bounce_hit_tex, 125, 90);
+			light_bumper10 = false;
+		}
+		else {
+			
+			App->renderer->Blit(bounce_tex, 125, 90);
+		}
+
+		
 	}
 
+	//LATERAL BUMPERS
+	{
 	p2List_item<PhysBody*>* lateral_bounce_right = lateral_bumper_right.getFirst();
 
 	while (lateral_bounce_right != nullptr)
@@ -286,14 +403,14 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(lateral_bounce_left_tex, x, y);
 		lateral_bounce_left = lateral_bounce_left->next;
 	}
+	}
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	int x, y;
-
+	
 	if (bodyA->body->GetFixtureList()->IsSensor())
 	{
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -324,7 +441,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			sensed_start_5 = true;
 		}
-
+	
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
@@ -342,25 +459,80 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		ball->body->ApplyForce({ 0,-power_ball }, ball->body->GetLocalCenter(), true);
 	}
 
-
-	p2List_item<PhysBody*>* item = bumper.getFirst();
-
-	while (item != nullptr)
+	//BUMPERS
 	{
-		if (bodyB == item->data)
-		{
-			reboted = true;
-		}
-		item = item->next;
+	if (bodyA == bumper1)
+	{
+			
+		reboted1 = true;
+		light_bumper1 = true;
 	}
 
+	if (bodyA == bumper2)
+	{
+		
+		reboted2 = true;
+		light_bumper2 = true;
+	}
+
+	if (bodyA == bumper3)
+	{
+		
+		light_bumper3 = true;
+		reboted3 = true;
+	}
+
+	if (bodyA == bumper4)
+	{
+		light_bumper4 = true;
+		reboted4 = true;
+	}
+
+	if (bodyA == bumper5)
+	{
+		light_bumper5 = true;
+		reboted5 = true;
+	}
+
+	if (bodyA == bumper6)
+	{
+		light_bumper6 = true;
+		reboted6 = true;
+	}
+
+	if (bodyA == bumper7)
+	{
+		light_bumper7 = true;
+		reboted7 = true;
+	}
+
+	if (bodyA == bumper8)
+	{
+		light_bumper8 = true;
+		reboted8 = true;
+	}
+
+	if (bodyA == bumper9)
+	{
+		light_bumper9 = true;
+		reboted9 = true;
+	}
+
+	if (bodyA == bumper10)
+	{
+		light_bumper10 = true;
+		reboted10 = true;
+	}
+	}
+	//LATERALS BUMPERS
+	{
 	p2List_item<PhysBody*>* item2 = lateral_bumper_right.getFirst();
 
 	while (item2 != nullptr)
 	{
 		if (bodyB == item2->data)
 		{
-			reboted2 = true;
+			reboted2_2 = true;
 		}
 		item2 = item2->next;
 	}
@@ -371,27 +543,90 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		if (bodyB == item3->data)
 		{
-			reboted2 = true;
+			reboted2_2 = true;
 		}
 		item3 = item3->next;
 	}
 
-	if (reboted)
+	if (reboted1)
 	{
 		//App->player->score += 100;
-
 		App->audio->PlayFx(bumper_fx);
-
-		reboted = false;
+		reboted1 = false;
+		
+		
 	}
-
 	if (reboted2)
 	{
 		//App->player->score += 100;
-		App->audio->PlayFx(lateral_bumper_fx);
+		App->audio->PlayFx(bumper_fx);
 		reboted2 = false;
+		
+	}
+	if (reboted3)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
+		reboted3 = false;
+		
+	}
+	if (reboted4)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
+		reboted4 = false;
+		
+	}
+	if (reboted5)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
+		reboted5 = false;
+		
+	}
+	if (reboted6)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
+		reboted6 = false;
+		
+
+	}
+	if (reboted7)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
+		reboted7 = false;
+		
+	}
+	if (reboted8)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
+		reboted8 = false;
+		
+	}
+	if (reboted9)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
+		reboted9 = false;
+		
+	}
+	if (reboted10)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
+		reboted10 = false;
 	}
 
+	if (reboted2_2)
+	{
+		//App->player->score += 100;
+		App->audio->PlayFx(lateral_bumper_fx);
+		reboted2_2 = false;
+	}
+	}
 }
 
 void ModuleSceneIntro::SetChain(){
@@ -557,54 +792,67 @@ void ModuleSceneIntro::AddBodies() {
 	ball->listener = this;
 	//live++;
 
-	//Sensor Start
-	rect_ground = App->physics->CreateRectangleSensor(241, 363, 10, 5);
-	rect_ground->listener = this;
+	//SENSORS
+	{//Sensor Start
+		rect_ground = App->physics->CreateRectangleSensor(241, 363, 10, 5);
+		rect_ground->listener = this;
 
-	//Death Sensor
-	sensor_death = App->physics->CreateRectangleSensor(123, SCREEN_HEIGHT, SCREEN_WIDTH / 4, 24);
-	sensor_death->listener = this;
+		//Death Sensor
+		sensor_death = App->physics->CreateRectangleSensor(123, SCREEN_HEIGHT, SCREEN_WIDTH / 4, 24);
+		sensor_death->listener = this;
 
-	//Sensors tube start 
-	sensor_start_1 = App->physics->CreateRectangleSensor(240, 273, 12, 5);
-	sensor_start_1->listener = this;
+		//Sensors tube start 
+		sensor_start_1 = App->physics->CreateRectangleSensor(240, 273, 12, 5);
+		sensor_start_1->listener = this;
 
-	sensor_start_2 = App->physics->CreateRectangleSensor(240, 217, 12, 5);
-	sensor_start_2->listener = this;
+		sensor_start_2 = App->physics->CreateRectangleSensor(240, 217, 12, 5);
+		sensor_start_2->listener = this;
 
-	sensor_start_3 = App->physics->CreateRectangleSensor(240, 158, 12, 5);
-	sensor_start_3->listener = this;
+		sensor_start_3 = App->physics->CreateRectangleSensor(240, 158, 12, 5);
+		sensor_start_3->listener = this;
 
-	sensor_start_4 = App->physics->CreateRectangleSensor(230, 113, 12, 5);
-	sensor_start_4->listener = this;
+		sensor_start_4 = App->physics->CreateRectangleSensor(230, 113, 12, 5);
+		sensor_start_4->listener = this;
 
-	sensor_start_5 = App->physics->CreateRectangleSensor(208, 78, 12, 5);
-	sensor_start_5->listener = this;
-
-	//bumpers
-	p2List_item<PhysBody*>* item;
-
-	bumper.add(App->physics->CreateCircle(80, 125, 8, false, 1.2f));
-	bumper.add(App->physics->CreateCircle(40, 120, 8, false, 1.2f));
-	bumper.add(App->physics->CreateCircle(200, 130, 8, false, 1.2f));
-	bumper.add(App->physics->CreateCircle(60, 195, 8, false, 1.2f));
-	bumper.add(App->physics->CreateCircle(110, 180, 8, false, 1.2f));
-	bumper.add(App->physics->CreateCircle(65, 280, 8, false, 1.2f));
-	bumper.add(App->physics->CreateCircle(195, 175, 8, false, 1.2f));
-	bumper.add(App->physics->CreateCircle(100, 220, 8, false, 1.2f));
-	bumper.add(App->physics->CreateCircle(150, 200, 8, false, 1.2f));
-	bumper.add(App->physics->CreateCircle(135, 100, 8, false, 1.2f));
-
-	item = bumper.getFirst();
-
-	while (item != nullptr)
-	{
-		item->data->listener = this;
-		item = item->next;
+		sensor_start_5 = App->physics->CreateRectangleSensor(208, 78, 12, 5);
+		sensor_start_5->listener = this;
 	}
 
-	//Lateral bumpers
+	//Bumpers
+	{
+	bumper1 = App->physics->CreateCircle(80, 125, 8, false, 1.2f);
+	bumper1->listener = this;
 
+	bumper2 = App->physics->CreateCircle(40, 120, 8, false, 1.2f);
+	bumper2->listener = this;
+
+	bumper3 = App->physics->CreateCircle(200, 130, 8, false, 1.2f);
+	bumper3->listener = this;
+
+	bumper4 = App->physics->CreateCircle(60, 195, 8, false, 1.2f);
+	bumper4->listener = this;
+
+	bumper5 = App->physics->CreateCircle(110, 180, 8, false, 1.2f);
+	bumper5->listener = this;
+
+	bumper6 = App->physics->CreateCircle(65, 280, 8, false, 1.2f);
+	bumper6->listener = this;
+
+	bumper7 = App->physics->CreateCircle(195, 175, 8, false, 1.2f);
+	bumper7->listener = this;
+
+	bumper8 = App->physics->CreateCircle(100, 220, 8, false, 1.2f);
+	bumper8->listener = this;
+
+	bumper9 = App->physics->CreateCircle(150, 200, 8, false, 1.2f);
+	bumper9->listener = this;
+
+	bumper10 = App->physics->CreateCircle(135, 100, 8, false, 1.2f);
+	bumper10->listener = this;
+	}
+	
+	//Lateral bumpers
+	{
 	p2List_item<PhysBody*>* item2;
 
 	int lateral_Bounce_right[10] = {
@@ -644,14 +892,14 @@ void ModuleSceneIntro::AddBodies() {
 		item3->data->listener = this;
 		item3 = item3->next;
 	}
-
+	}
 
 }
 
 void ModuleSceneIntro::CreateJoints() {
 
-	b2RevoluteJoint* left_flipper_ball_joint;
-	b2RevoluteJoint* right_flipper_ball_joint;
+	b2RevoluteJoint* left_flipper_ball_joint = nullptr;
+	b2RevoluteJoint* right_flipper_ball_joint = nullptr;
 	b2RevoluteJointDef left_flipper_definition;
 	b2RevoluteJointDef right_flipper_definition;
 	
