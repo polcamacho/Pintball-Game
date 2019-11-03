@@ -125,8 +125,9 @@ public:
 	SDL_Texture* lateral_bounce_left_tex_light;
 	SDL_Texture* lateral_bounce_right_tex;
 	SDL_Texture* lateral_bounce_right_tex_light;
-	
-
+	SDL_Texture* score_tex;
+	SDL_Texture* prev_score_tex;
+	SDL_Texture* high_score_tex;
 
 	uint start_fx;
 	uint ball_throw_fx;

@@ -59,7 +59,9 @@ bool ModuleSceneIntro::Start()
 	bounce_hit_tex = App->textures->Load("pinball/Bounce_when_hit.png");
 	lateral_bounce_right_tex_light = App->textures->Load("pinball/lateral_Bounce_right_light.png");
 	lateral_bounce_left_tex_light = App->textures->Load("pinball/lateral_Bounce_left_light.png");
-	
+	score_tex = App->textures->Load("pinball/score_font.png");
+	high_score_tex = App->textures->Load("pinball/high_score_font.png");
+	prev_score_tex = App->textures->Load("pinball/previous_score_font.png");
 	
 	//FONTS
 	score=App->fonts->Load("pinball/numbers_font.png", "0123456789", 1);
@@ -104,10 +106,11 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(bounce_hit_tex);
 	App->textures->Unload(lateral_bounce_left_tex);
 	App->textures->Unload(lateral_bounce_left_tex_light);
-	
 	App->textures->Unload(lateral_bounce_right_tex);
 	App->textures->Unload(lateral_bounce_right_tex_light);
-	
+	App->textures->Unload(score_tex);
+	App->textures->Unload(high_score_tex);
+
 	App->fonts->UnLoad(0);
 
 	return true;
@@ -131,9 +134,9 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(tunnel_tex, 90, 35);
 	App->renderer->Blit(lights_ball_throw, 200, 62);
 	App->renderer->Blit(title, 9, 364);
-	
-
-	
+	App->renderer->Blit(score_tex, 350, 175);
+	App->renderer->Blit(high_score_tex, 283, 47);
+	App->renderer->Blit(prev_score_tex, 274, 98);
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
@@ -159,19 +162,12 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
-		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.3f, true);
+		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.15f, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.3f, true);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 5, true, 0.0f, 1.5f));
-
-		circles.getLast()->data->listener = this;
+		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.15f, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
@@ -301,13 +297,13 @@ update_status ModuleSceneIntro::Update()
 	App->fonts->BlitText(360, 213, 0, lives_char);
 
 	sprintf_s(score_char, 10, "%d", score);
-	App->fonts->BlitText(270, 174, 0, score_char);
+	App->fonts->BlitText(257, 174, 0, score_char);
 
 	sprintf_s(highscore_char, 10, "%d", highscore);
-	App->fonts->BlitText(270, 275, 0, highscore_char);
+	App->fonts->BlitText(274, 67, 0, highscore_char);
 
 	sprintf_s(previous_char, 10, "%d", previous_score);
-	App->fonts->BlitText(270,295, 0, previous_char);
+	App->fonts->BlitText(274, 118, 0, previous_char);
 
 	//BUMPERS
 	{
@@ -349,7 +345,7 @@ update_status ModuleSceneIntro::Update()
 
 		if (light_bumper4 == true)
 		{
-			App->renderer->Blit(bounce_hit_tex, 200, 255);
+			App->renderer->Blit(bounce_hit_tex, 190, 245);
 			light_bumper4 = false;
 		}
 		else {
@@ -472,7 +468,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	
 	if (bodyA->body->GetFixtureList()->IsSensor())
 	{
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
 		{
 			start = true;
 		}
@@ -959,11 +955,11 @@ void ModuleSceneIntro::CreateJoints() {
 	b2RevoluteJointDef left_flipper_definition;
 	b2RevoluteJointDef right_flipper_definition;
 	
-	left_flipper = App->physics->CreateRectangle(100, 340, 35, 8, true, 0.75f);
-	right_flipper = App->physics->CreateRectangle(141, 340, 35, 8, true, 0.75f);
+	left_flipper = App->physics->CreateRectangle(100, 340, 35, 8, true, 0.3f);
+	right_flipper = App->physics->CreateRectangle(143, 342, 35, 8, true, 0.3f);
 	
 	left_flipper_ball = App->physics->CreateCircle(87, 342, 2, false, 0.25f, 1.0f);
-	right_flipper_ball = App->physics->CreateCircle(154, 342, 2, false, 0.25f, 1.0f);
+	right_flipper_ball = App->physics->CreateCircle(154, 344, 2, false, 0.25f, 1.0f);
 	
 	left_flipper_definition.Initialize(left_flipper->body, left_flipper_ball->body, left_flipper_ball->body->GetWorldCenter());
 	right_flipper_definition.Initialize(right_flipper_ball->body, right_flipper->body, right_flipper_ball->body->GetWorldCenter());
