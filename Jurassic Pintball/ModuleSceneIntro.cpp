@@ -132,14 +132,34 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(lights_ball_throw, 200, 62);
 	App->renderer->Blit(title, 9, 364);
 	
-
-	
-
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
 
-		power_ball = 15.6f;
-		power_ball += 2;
+		power_ball = -18.6f;
+		
+		
+	}
+
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+
+		power_ball = -18.6f;
+		
+
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	{
+
+		if (start == true)
+		{
+			ball->body->SetLinearVelocity(b2Vec2(0, power_ball));
+			App->audio->PlayFx(ball_throw_fx);
+			start = false;
+		}
+
+		power_ball = 0;
 
 	}
 
@@ -159,12 +179,12 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
-		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.3f, true);
+		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.15f, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.3f, true);
+		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.15f, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -473,6 +493,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyA->body->GetFixtureList()->IsSensor())
 	{
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		{
+			start = true;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
 		{
 			start = true;
 		}
@@ -959,8 +984,8 @@ void ModuleSceneIntro::CreateJoints() {
 	b2RevoluteJointDef left_flipper_definition;
 	b2RevoluteJointDef right_flipper_definition;
 	
-	left_flipper = App->physics->CreateRectangle(100, 340, 35, 8, true, 0.75f);
-	right_flipper = App->physics->CreateRectangle(141, 340, 35, 8, true, 0.75f);
+	left_flipper = App->physics->CreateRectangle(100, 340, 35, 8, true, 0.15f);
+	right_flipper = App->physics->CreateRectangle(141, 340, 35, 8, true, 0.15);
 	
 	left_flipper_ball = App->physics->CreateCircle(87, 342, 2, false, 0.25f, 1.0f);
 	right_flipper_ball = App->physics->CreateCircle(154, 342, 2, false, 0.25f, 1.0f);
