@@ -2,9 +2,13 @@
 
 This is our first pinball game made with Box2D.
 
-## Link to the original game:
+## Link to the original game
 
 http://www.freewebarcade.com/game/jurassic-pinball/
+
+## Link to Github
+
+https://github.com/polcamacho/Pintball-Game
 
 ## Students involved
 
