@@ -126,7 +126,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
 	{
-		power_ball = 6.25f;
+		power_ball = 15.6f;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
@@ -335,11 +335,11 @@ update_status ModuleSceneIntro::Update()
 
 		if (light_bumper4 == true)
 		{
-			App->renderer->Blit(bounce_hit_tex, 50, 185);
+			App->renderer->Blit(bounce_hit_tex, 200, 255);
 			light_bumper4 = false;
 		}
 		else {
-			App->renderer->Blit(bounce_tex, 50, 185);
+			App->renderer->Blit(bounce_tex, 190, 245);
 		}
 
 		if (light_bumper5 == true)
@@ -483,15 +483,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.5f, true);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.5f, true);
-	}
+	
 
 	if (bodyA->body->GetFixtureList()->IsSensor())
 	{
@@ -817,23 +809,25 @@ void ModuleSceneIntro::SetChain(){
 
 	background_chain6 = App->physics->CreateChain(0, 0, lateral_down_right, false, 16, 0.0f);
 	
-	int laterals_left[8] = {
-	26, 297,
-	26, 318,
-	31, 318,
-	31, 304
+	int laterals_left[10] = {
+		26, 316,
+		26, 284,
+		32, 293,
+		32, 318,
+		28, 317
 	};
 
-	background_chain7 = App->physics->CreateChain(0, 0, laterals_left, false, 8, 0.0f);
+	background_chain7 = App->physics->CreateChain(0, 0, laterals_left, false, 10, 0.0f);
 
-	int laterals_right[8] = {
-	221, 297,
-	221, 316,
-	216, 316,
-	216, 304
+	int laterals_right[10] = {
+		216, 315,
+		216, 288,
+		221, 284,
+		221, 313,
+		217, 315
 	};
 	
-	background_chain8 = App->physics->CreateChain(0, 0, laterals_right, false, 8, 0.0f);
+	background_chain8 = App->physics->CreateChain(0, 0, laterals_right, false, 10, 0.0f);
 
 	int start_wall[12] = {
 	59, 57,
@@ -892,7 +886,7 @@ void ModuleSceneIntro::AddBodies() {
 	bumper3 = App->physics->CreateCircle(200, 130, 8, false, 1.0f, 1.0f);
 	bumper3->listener = this;
 
-	bumper4 = App->physics->CreateCircle(60, 195, 8, false, 1.0f, 1.0f);
+	bumper4 = App->physics->CreateCircle(200, 255, 8, false, 1.0f, 1.0f);
 	bumper4->listener = this;
 
 	bumper5 = App->physics->CreateCircle(110, 180, 8, false, 1.0f, 1.0f);
