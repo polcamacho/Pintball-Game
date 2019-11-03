@@ -137,12 +137,35 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(score_tex, 350, 175);
 	App->renderer->Blit(high_score_tex, 283, 47);
 	App->renderer->Blit(prev_score_tex, 274, 98);
-
+	
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
 
-		power_ball = 15.6f;
-		power_ball += 2;
+		power_ball = -18.6f;
+		
+		
+	}
+
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+
+		power_ball = -18.6f;
+		
+
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	{
+
+		if (start == true)
+		{
+			ball->body->SetLinearVelocity(b2Vec2(0, power_ball));
+			App->audio->PlayFx(ball_throw_fx);
+			start = false;
+		}
+
+		power_ball = 0;
 
 	}
 
@@ -169,6 +192,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.15f, true);
 	}
+
 
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
@@ -472,6 +496,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			start = true;
 		}
+
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+		{
+			start = true;
+		}
 		if (bodyA == sensor_death)
 		{
 			sensed = true;
@@ -609,43 +638,90 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted1 = false;
-		score += 100;
-		
+		if(score<5000){
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted2)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted2 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted3)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted3 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted4)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted4 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted5)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted5 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted6)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted6 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 
 	}
 	if (reboted7)
@@ -653,35 +729,75 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted7 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted8)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted8 = false;
-		score += 100;
+		if(score<5000){
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted9)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted9 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted10)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted10 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 
 	if (reboted2_1)
 	{
 		App->audio->PlayFx(lateral_bumper_fx);
 		reboted2_1 = false;
-		score += 150;
+		if (score < 5000) {
+			score += 200;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 300;
+		}
+		else {
+			score += 400;
+		}
 	}
 
 	if (reboted2_2)
@@ -689,7 +805,15 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		App->audio->PlayFx(lateral_bumper_fx);
 		reboted2_2 = false;
-		score += 150;
+		if (score < 5000) {
+			score += 200;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 300;
+		}
+		else {
+			score += 400;
+		}
 	}
 	
 }
