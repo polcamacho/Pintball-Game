@@ -7,6 +7,8 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 #include "ModulePlayer.h"
+#include "ModuleFonts.h"
+
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -52,6 +54,8 @@ bool ModuleSceneIntro::Start()
 	light4_ball_throw_on = App->textures->Load("pinball/light_4.png");
 	light5_ball_throw_on = App->textures->Load("pinball/light_5.png");
 	bounce_hit_tex = App->textures->Load("pinball/bounce_when_hit.png");
+	
+	App->fonts->Load("pinball/numbers_font.png", "0123456789", 1);
 
 	//SFX
 	ball_throw_fx = App->audio->LoadFx("pinball/Sound/ball_trow.wav");
@@ -101,7 +105,9 @@ update_status ModuleSceneIntro::Update()
 		
 	//blits
 	App->renderer->Blit(pin_background, 0, 0);
-	
+	App->fonts->BlitText(377, 174, 0, "0");
+	App->fonts->BlitText(360, 210, 0, "5");
+
 	if (ball != nullptr)
 	{//ball
 		int x, y;
@@ -116,7 +122,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		power_ball = -21.5f;
+		power_ball = -25.6f;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
