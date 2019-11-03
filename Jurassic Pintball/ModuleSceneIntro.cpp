@@ -638,43 +638,90 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted1 = false;
-		score += 100;
-		
+		if(score<5000){
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted2)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted2 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted3)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted3 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted4)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted4 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted5)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted5 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted6)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted6 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 
 	}
 	if (reboted7)
@@ -682,35 +729,75 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted7 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted8)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted8 = false;
-		score += 100;
+		if(score<5000){
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted9)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted9 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 	if (reboted10)
 	{
 		
 		App->audio->PlayFx(bumper_fx);
 		reboted10 = false;
-		score += 100;
+		if (score < 5000) {
+			score += 100;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 150;
+		}
+		else {
+			score += 200;
+		}
 	}
 
 	if (reboted2_1)
 	{
 		App->audio->PlayFx(lateral_bumper_fx);
 		reboted2_1 = false;
-		score += 150;
+		if (score < 5000) {
+			score += 200;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 300;
+		}
+		else {
+			score += 400;
+		}
 	}
 
 	if (reboted2_2)
@@ -718,7 +805,15 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		App->audio->PlayFx(lateral_bumper_fx);
 		reboted2_2 = false;
-		score += 150;
+		if (score < 5000) {
+			score += 200;
+		}
+		else if (score < 10000 && score> 5000) {
+			score += 300;
+		}
+		else {
+			score += 400;
+		}
 	}
 	
 }

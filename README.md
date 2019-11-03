@@ -34,4 +34,4 @@ Road where ball falls down background has been changed and is more visible.
 
 Bumpers also have been changed to have a better distribution of them.
 
-Combo: if total points in one game is greater than 10000, the final score is duplicated.
+Combo: If score is greater than 5000, points of each bumper are multiplied for 1.5. If is more than 10000 points, multiplier is 2.
