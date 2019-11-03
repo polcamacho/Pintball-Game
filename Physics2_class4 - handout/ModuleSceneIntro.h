@@ -72,6 +72,7 @@ public:
 	SDL_Texture* pin_background;
 	SDL_Texture* ball_tex;
 	SDL_Texture* bounce_tex;
+	SDL_Texture* bounce_hit_tex;
 	SDL_Texture* lateral_bounce_left_tex;
 	SDL_Texture* lateral_bounce_right_tex;
 	SDL_Texture* flipper_left_tex;
