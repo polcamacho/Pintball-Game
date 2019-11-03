@@ -177,6 +177,7 @@ update_status ModuleSceneIntro::Update()
 			ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
 			App->audio->PlayFx(loose_bip_fx);
 			App->audio->PlayFx(loose_dinosaur_fx);
+			previous_score = score;
 			sensed = false;
 			
 			lives -= 1;
@@ -286,13 +287,13 @@ update_status ModuleSceneIntro::Update()
 	App->fonts->BlitText(360, 213, 0, lives_char);
 
 	sprintf_s(score_char, 10, "%d", score);
-	App->fonts->BlitText(275, 174, 0, score_char);
+	App->fonts->BlitText(270, 174, 0, score_char);
 
-	/*sprintf_s(highscore_char, 10, "%d", highscore);
-	App->fonts->BlitText(270, 200, 0, highscore_char);
+	sprintf_s(highscore_char, 10, "%d", highscore);
+	App->fonts->BlitText(270, 275, 0, highscore_char);
 
 	sprintf_s(previous_char, 10, "%d", previous_score);
-	App->fonts->BlitText(270, 225, 0, previous_char);*/
+	App->fonts->BlitText(270,295, 0, previous_char);
 
 	//BUMPERS
 	{
@@ -977,10 +978,10 @@ void ModuleSceneIntro::CreateJoints() {
 	b2RevoluteJointDef right_flipper_definition;
 	
 	left_flipper = App->physics->CreateRectangle(100, 340, 35, 8, true, 0.75f);
-	right_flipper = App->physics->CreateRectangle(140, 340, 35, 8, true, 0.75f);
+	right_flipper = App->physics->CreateRectangle(141, 340, 35, 8, true, 0.75f);
 	
 	left_flipper_ball = App->physics->CreateCircle(87, 342, 2, false, 0.25f, 1.0f);
-	right_flipper_ball = App->physics->CreateCircle(153, 342, 2, false, 0.25f, 1.0f);
+	right_flipper_ball = App->physics->CreateCircle(154, 342, 2, false, 0.25f, 1.0f);
 	
 	left_flipper_definition.Initialize(left_flipper->body, left_flipper_ball->body, left_flipper_ball->body->GetWorldCenter());
 	right_flipper_definition.Initialize(right_flipper_ball->body, right_flipper->body, right_flipper_ball->body->GetWorldCenter());
@@ -1006,9 +1007,12 @@ void ModuleSceneIntro::RestartBall(bool reset)
 	if (reset == true)
 	{
 		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(241), PIXEL_TO_METERS(340)), 0);
+		if (score > highscore) {
+			highscore = score;
+		}
 		score = 0;
 		lives = 3;
-		//previous_score = score;
+		previous_score = 0;
 	}
 	else
 	{
