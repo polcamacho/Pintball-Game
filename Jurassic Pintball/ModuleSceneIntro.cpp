@@ -145,12 +145,15 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(lights_ball_throw, 200, 62);
 	App->renderer->Blit(title, 9, 364);
 	
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+
+	
+
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
 	{
-		power_ball = -25.6f;
+		power_ball = 6.25f;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
 
 		if (start == true)
@@ -166,12 +169,12 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
-		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.5f, true);
+		App->scene_intro->left_flipper->body->ApplyAngularImpulse(-0.1f, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
-		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.5f, true);
+		App->scene_intro->right_flipper->body->ApplyAngularImpulse(0.1f, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -335,11 +338,11 @@ update_status ModuleSceneIntro::Update()
 
 		if (light_bumper2 == true)
 		{
-			App->renderer->Blit(bounce_hit_tex, 30, 110);
+			App->renderer->Blit(bounce_hit_tex, 32, 140);
 			light_bumper2 = false;
 		}
 		else {
-			App->renderer->Blit(bounce_tex, 30, 110);
+			App->renderer->Blit(bounce_tex, 32, 140);
 			
 		}
 
@@ -921,7 +924,7 @@ void ModuleSceneIntro::AddBodies() {
 	bumper1 = App->physics->CreateCircle(80, 125, 8, false, 1.0f, 1.0f);
 	bumper1->listener = this;
 
-	bumper2 = App->physics->CreateCircle(40, 120, 8, false, 1.0f, 1.0f);
+	bumper2 = App->physics->CreateCircle(42, 150, 8, false, 1.0f, 1.0f);
 	bumper2->listener = this;
 
 	bumper3 = App->physics->CreateCircle(200, 130, 8, false, 1.0f, 1.0f);
