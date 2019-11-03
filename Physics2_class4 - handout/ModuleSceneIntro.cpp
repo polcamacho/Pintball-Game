@@ -90,6 +90,7 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(light3_ball_throw_on);
 	App->textures->Unload(light4_ball_throw_on);
 	App->textures->Unload(light5_ball_throw_on);
+	App->textures->Unload(bounce_hit_tex);
 
 	return true;
 }
@@ -145,7 +146,8 @@ update_status ModuleSceneIntro::Update()
 	if (sensed == true)
 	{
 		ball->body->SetTransform({ PIXEL_TO_METERS(242), PIXEL_TO_METERS(355 - 0.2f) }, 0.0f);
-		
+		App->audio->PlayFx(loose_bip_fx);
+		App->audio->PlayFx(loose_dinosaur_fx);
 		sensed = false;
 	}
 
