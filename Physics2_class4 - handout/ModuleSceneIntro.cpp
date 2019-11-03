@@ -51,7 +51,7 @@ bool ModuleSceneIntro::Start()
 	light3_ball_throw_on = App->textures->Load("pinball/light_1_2_3.png");
 	light4_ball_throw_on = App->textures->Load("pinball/light_4.png");
 	light5_ball_throw_on = App->textures->Load("pinball/light_5.png");
-
+	bounce_hit_tex = App->textures->Load("pinball/bounce_when_hit.png");
 
 	//SFX
 	ball_throw_fx = App->audio->LoadFx("pinball/Sound/ball_trow.wav");
@@ -284,10 +284,6 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(lateral_bounce_left_tex, x, y);
 		lateral_bounce_left = lateral_bounce_left->next;
 	}
-
-
-	
-
 
 	return UPDATE_CONTINUE;
 }
